@@ -1,0 +1,38 @@
+---
+// Every page of the site is generated here: one entry per language × view.
+// To add a page type: create a view in src/views/ and push its paths below.
+import Home from '../views/Home.astro';
+import Project from '../views/Project.astro';
+import Cv from '../views/Cv.astro';
+import { load, type Project as P } from '../lib/data';
+import { makeCtx, prefix } from '../lib/i18n';
+
+export async function getStaticPaths() {
+  const { site, projects } = await load();
+  const def = site.languages[0].code;
+  const paths = [];
+  for (const { code } of site.languages) {
+    const pre = prefix(code, def);
+    const at = (p: string) => (pre + p).replace(/\/$/, '') || undefined;
+    paths.push({ params: { path: at('') }, props: { view: 'home', lang: code, path: '' } });
+    paths.push({ params: { path: at('cv/') }, props: { view: 'cv', lang: code, path: 'cv/' } });
+    for (const p of projects) {
+      paths.push({ params: { path: at(`work/${p.id}/`) }, props: { view: 'project', lang: code, path: `work/${p.id}/`, project: p } });
+    }
+  }
+  return paths;
+}
+
+interface Props {
+  view: 'home' | 'cv' | 'project';
+  lang: string;
+  path: string;
+  project?: P;
+}
+const { view, lang, path, project } = Astro.props;
+const { site, ui } = await load();
+const ctx = makeCtx(lang, path, site.languages, ui);
+---
+{view === 'home' && <Home ctx={ctx} />}
+{view === 'cv' && <Cv ctx={ctx} />}
+{view === 'project' && project && <Project ctx={ctx} project={project} />}

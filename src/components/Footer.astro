@@ -1,0 +1,50 @@
+---
+import Icon from './Icon.astro';
+import { load } from '../lib/data';
+import type { Ctx } from '../lib/i18n';
+
+interface Props {
+  ctx: Ctx;
+}
+const { ctx } = Astro.props;
+const { site } = await load();
+const year = new Date().getFullYear();
+---
+<footer class="foot wrap">
+  <p>© {year} {ctx.t(site.name)}</p>
+  <ul class="socials">
+    {site.socials.map((s) => <li><a href={s.url} rel="me noopener" target="_blank">{s.label}</a></li>)}
+  </ul>
+  <a class="top" href="#top">{ctx.ui('footer.top')}<Icon name="up" size={16} /></a>
+</footer>
+
+<style>
+  .foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 28px;
+    padding-block: 28px 32px;
+    font-size: var(--step--1);
+    font-weight: 560;
+  }
+  .socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+  }
+  .socials a,
+  .top {
+    text-decoration: none;
+  }
+  .socials a:hover,
+  .top:hover {
+    text-decoration: underline;
+  }
+  .top {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+</style>

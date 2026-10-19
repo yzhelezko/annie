@@ -1,0 +1,27 @@
+title:
+  en: Showreel
+  ru: Шоурил
+  uk: Шоурил
+year: 2026
+role:
+  en: Motion design
+  ru: Моушн-дизайн
+  uk: Моушн-дизайн
+tags:
+  - { en: Reel, ru: Шоурил, uk: Шоурил }
+summary:
+  en: "Demo: a long video embedded from YouTube or Vimeo — paste the link as src. This one is Big Buck Bunny (Blender Foundation, CC BY)."
+  ru: "Демо: длинное видео с YouTube или Vimeo — вставьте ссылку в src. Здесь Big Buck Bunny (Blender Foundation, CC BY)."
+  uk: "Демо: довге відео з YouTube або Vimeo — вставте посилання в src. Тут Big Buck Bunny (Blender Foundation, CC BY)."
+cover: poster.jpg
+size: full
+color: "#17171c"
+order: 6
+demo: true
+blocks:
+  - src: https://www.youtube.com/watch?v=aqz-KE-bpKQ
+    alt: Big Buck Bunny
+    width: wide
+  # Vimeo работает так же:
+  # - src: https://vimeo.com/123456789
+  #   poster: frame.jpg     # для Vimeo лучше указать свой кадр-обложку

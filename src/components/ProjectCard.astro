@@ -1,0 +1,142 @@
+---
+import Media from './Media.astro';
+import Icon from './Icon.astro';
+import { resolve } from '../lib/media';
+import { dirOf, type Project } from '../lib/data';
+import { hash } from '../engine/marbling';
+import type { Ctx } from '../lib/i18n';
+
+interface Props {
+  ctx: Ctx;
+  project: Project;
+  color: string;
+  eager?: boolean;
+}
+const { ctx, project, color, eager } = Astro.props;
+const d = project.data;
+const dir = dirOf(project.filePath);
+const RATIO = { full: '21/9', wide: '16/10', half: '4/3', third: '4/5' } as const;
+const SIZES = {
+  full: '(min-width: 1680px) 1600px, 100vw',
+  wide: '(min-width: 900px) 66vw, 100vw',
+  half: '(min-width: 900px) 50vw, 100vw',
+  third: '(min-width: 900px) 33vw, (min-width: 560px) 50vw, 100vw',
+} as const;
+const res = resolve(d.cover, dir, `${project.filePath} → cover`, d.poster);
+const title = ctx.t(d.title);
+const h = hash(project.id);
+const origin = `--ox:${18 + (h % 64)}%;--oy:${22 + ((h >> 8) % 56)}%`;
+const meta = [d.client && ctx.t(d.client), ...d.tags.slice(0, 2).map(ctx.t)].filter(Boolean);
+---
+<li class={`card size-${d.size}`} style={`--c:${d.color ?? color};${origin}`}>
+  <div class="frame reveal" style={`aspect-ratio:${d.coverRatio ?? RATIO[d.size]}`}>
+    <Media ctx={ctx} res={res} alt={title} ratio={d.coverRatio ?? RATIO[d.size]} sizes={SIZES[d.size]} eager={eager} />
+    <a class="hit" href={ctx.href(`work/${project.id}/`)} tabindex="-1" aria-hidden="true"></a>
+    {d.demo && <span class="slip demo">{ctx.ui('work.demo')}</span>}
+  </div>
+  <div class="label">
+    <h3><a href={ctx.href(`work/${project.id}/`)}>{title}</a></h3>
+    <p class="meta"><span class="tnum">{d.year}</span>{meta.map((m) => <span>{m}</span>)}</p>
+    <Icon name="arrow" size={22} />
+  </div>
+</li>
+
+<style>
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .frame {
+    position: relative;
+    overflow: hidden;
+    background: var(--c);
+  }
+  .demo {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .label {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    gap: 6px 16px;
+    padding: 14px 12px 14px 0;
+    isolation: isolate;
+    transition: color 200ms;
+  }
+  .label h3,
+  .meta {
+    transition: translate 500ms var(--ease-spread);
+  }
+  .card:hover :is(h3, .meta),
+  .card:focus-within :is(h3, .meta) {
+    translate: 14px 0;
+  }
+  /* the project's pigment drops into its own label */
+  .label::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--c);
+    clip-path: circle(0 at 0 50%);
+    transition: clip-path 560ms var(--ease-spread);
+  }
+  .card:hover .label,
+  .card:focus-within .label {
+    color: var(--paper);
+  }
+  .card:hover .label::before,
+  .card:focus-within .label::before {
+    clip-path: circle(150% at 0 50%);
+  }
+  h3 {
+    font-size: var(--step-2);
+    letter-spacing: -0.04em;
+  }
+  .size-third h3 {
+    font-size: var(--step-1);
+  }
+  h3 a {
+    text-decoration: none;
+  }
+  h3 a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .hit {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+  .frame :global(.vctl) {
+    z-index: 2;
+  }
+  .meta {
+    grid-column: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px 14px;
+    font-size: var(--step--1);
+    font-weight: 560;
+  }
+  .label :global(.icon) {
+    grid-column: 2;
+    grid-row: 1;
+    margin-top: 0.15em;
+    transition: translate 400ms var(--ease-spread);
+  }
+  .card:hover .label :global(.icon) {
+    translate: -8px 0;
+  }
+  .card:has(h3 a:focus-visible) .frame {
+    outline: 2px solid var(--ink);
+    outline-offset: 4px;
+  }
+</style>

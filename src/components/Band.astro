@@ -1,0 +1,21 @@
+---
+// A marbled band rendered at build time as SVG: no script, and vector-sharp in the printed PDF.
+import { Bath, recipe, settle, rng, hash, toSvgPaths } from '../engine/marbling';
+
+interface Props {
+  seed: string;
+  colors: string[];
+  width?: number;
+  height?: number;
+  class?: string;
+}
+const { seed, colors, width = 1000, height = 260, class: cls } = Astro.props;
+const h = hash(seed);
+const bath = new Bath(width, height, colors[0], 2.2);
+settle(bath, recipe(width, height, colors.slice(1).concat(colors[0]), rng(h), h % 2 ? 'battal' : 'bulbul'));
+const paths = toSvgPaths(bath, 1.2, 0);
+---
+<svg class={cls} viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <rect width={width} height={height} fill={bath.base} />
+  {paths.map((p) => <path d={p.d} fill={p.color} />)}
+</svg>

@@ -1,0 +1,149 @@
+---
+// Renders a project's `blocks:` list. To add a block type: extend the union in
+// src/content.config.ts, then add a branch here.
+import Media from '../Media.astro';
+import { resolve } from '../../lib/media';
+import type { Ctx } from '../../lib/i18n';
+import type { Project } from '../../lib/data';
+
+interface Props {
+  ctx: Ctx;
+  project: Project;
+  dir: string;
+}
+const { ctx, project, dir } = Astro.props;
+const title = ctx.t(project.data.title);
+const at = (i: number) => `${project.filePath} → blocks[${i}]`;
+const SIZES = { full: '100vw', wide: '(min-width: 1680px) 1600px, 100vw', narrow: '(min-width: 900px) 760px, 100vw' } as const;
+type M = { src: string; alt?: unknown; caption?: unknown; poster?: string; ratio?: string; controls?: boolean };
+const alt = (m: M) => ctx.t(m.alt as never) || title;
+---
+<div class="blocks">
+  {
+    project.data.blocks.map((b, i) => {
+      if (b.type === 'media')
+        return (
+          <figure class={`b w-${b.width}`}>
+            <Media ctx={ctx} res={resolve(b.src, dir, at(i), b.poster)} alt={alt(b)} ratio={b.ratio} sizes={SIZES[b.width]} controls={b.controls} />
+            {b.caption && <figcaption>{ctx.t(b.caption)}</figcaption>}
+          </figure>
+        );
+      if (b.type === 'row')
+        return (
+          <figure class="b w-wide row" style={`--n:${b.row.length}`}>
+            {b.row.map((m) => (
+              <Media ctx={ctx} res={resolve(m.src, dir, at(i), m.poster)} alt={alt(m)} ratio={m.ratio ?? '4/5'} sizes={`(min-width: 900px) ${Math.round(100 / b.row.length)}vw, 100vw`} controls={m.controls} />
+            ))}
+            {b.caption && <figcaption>{ctx.t(b.caption)}</figcaption>}
+          </figure>
+        );
+      if (b.type === 'gallery')
+        return (
+          <div class="b w-wide gallery" style={`--n:${b.columns}`}>
+            {b.gallery.map((m) => (
+              <figure>
+                <Media ctx={ctx} res={resolve(m.src, dir, at(i), m.poster)} alt={alt(m)} ratio={m.ratio} sizes={`(min-width: 900px) ${Math.round(100 / b.columns)}vw, 50vw`} controls={m.controls} />
+                {m.caption && <figcaption>{ctx.t(m.caption)}</figcaption>}
+              </figure>
+            ))}
+          </div>
+        );
+      if (b.type === 'text')
+        return (
+          <div class="b w-narrow text">
+            {b.title && <h2>{ctx.t(b.title)}</h2>}
+            {ctx.t(b.text).split(/\n{2,}/).map((p) => <p>{p}</p>)}
+          </div>
+        );
+      if (b.type === 'quote')
+        return (
+          <blockquote class="b w-narrow quote">
+            <p>{ctx.t(b.quote)}</p>
+            <footer>{b.author}</footer>
+          </blockquote>
+        );
+    })
+  }
+</div>
+
+<style>
+  .blocks {
+    display: grid;
+    gap: clamp(20px, 3vw, 48px);
+    padding-block: clamp(20px, 3vw, 48px) var(--space-1);
+  }
+  .b {
+    width: 100%;
+    margin-inline: auto;
+  }
+  .w-full {
+    max-width: none;
+  }
+  .w-wide {
+    max-width: var(--max);
+    padding-inline: var(--gutter);
+  }
+  .w-narrow {
+    max-width: calc(760px + 2 * var(--gutter));
+    padding-inline: var(--gutter);
+  }
+  figcaption {
+    margin-top: 10px;
+    font-size: var(--step--1);
+    color: var(--ink-2);
+    max-width: 70ch;
+  }
+  .w-full figcaption {
+    padding-inline: var(--gutter);
+  }
+  .row {
+    display: grid;
+    grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+    gap: var(--gap);
+  }
+  .row figcaption {
+    grid-column: 1 / -1;
+    margin-top: 0;
+  }
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+    gap: var(--gap);
+    align-items: start;
+  }
+  @media (max-width: 700px) {
+    .row {
+      grid-template-columns: 1fr;
+    }
+    .gallery {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .text {
+    display: grid;
+    gap: 1em;
+    padding-block: clamp(16px, 3vw, 40px);
+  }
+  .text h2 {
+    font-size: var(--step-2);
+    margin-bottom: 0.2em;
+  }
+  .text p {
+    font-size: var(--step-1);
+    line-height: 1.5;
+  }
+  .quote p {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+  }
+  .quote footer {
+    margin-top: 1em;
+    font-weight: 600;
+  }
+  .quote {
+    margin-block: clamp(16px, 3vw, 40px);
+  }
+</style>

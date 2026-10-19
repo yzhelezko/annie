@@ -1,0 +1,26 @@
+title:
+  en: Field notes magazine
+  ru: Журнал Field notes
+  uk: Журнал Field notes
+year: 2024
+client: Field notes (demo)
+role:
+  en: Editorial design
+  ru: Редакционный дизайн
+  uk: Редакційний дизайн
+tags:
+  - { en: Editorial, ru: Редакционный, uk: Редакційний }
+summary:
+  en: "Demo project. Layouts for a small travel magazine."
+  ru: "Демо-проект. Вёрстка небольшого журнала о путешествиях."
+  uk: "Демо-проєкт. Верстка невеликого журналу про подорожі."
+cover: spread-1.jpg
+size: half
+color: "#c42b2b"
+order: 5
+demo: true
+blocks:
+  - src: spread-1.jpg
+    width: wide
+  - src: spread-2.jpg
+    width: wide

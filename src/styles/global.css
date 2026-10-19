@@ -1,0 +1,244 @@
+/* World rules: flat pigment, no gradients, no shadows, no opacity blends. Inks displace; they never mix. */
+
+:root {
+  --font-display: 'Unbounded Variable', 'Unbounded', 'Arial Black', sans-serif;
+  --font-text: 'Commissioner Variable', 'Commissioner', system-ui, sans-serif;
+
+  --ink-2: color-mix(in srgb, var(--ink) 74%, var(--paper));
+  --hair: color-mix(in srgb, var(--ink) 22%, var(--paper));
+
+  --step--1: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+  --step-0: clamp(1rem, 0.97rem + 0.15vw, 1.0625rem);
+  --step-1: clamp(1.1875rem, 1.08rem + 0.5vw, 1.5rem);
+  --step-2: clamp(1.5rem, 1.25rem + 1.2vw, 2.25rem);
+  --step-3: clamp(2rem, 1.4rem + 2.8vw, 4rem);
+  --step-4: clamp(2.75rem, 1rem + 8.2vw, 9.5rem);
+
+  --gutter: clamp(16px, 3.2vw, 44px);
+  --gap: clamp(14px, 1.8vw, 28px);
+  --max: 1680px;
+  --space-1: clamp(56px, 7vw, 120px);
+  --space-2: clamp(88px, 12vw, 200px);
+
+  --ease-spread: cubic-bezier(0.12, 0.8, 0.22, 1);
+  --ease-sink: cubic-bezier(0.6, 0, 0.9, 0.4);
+
+  color-scheme: light;
+  scrollbar-color: var(--ink) var(--paper);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: 88px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: var(--step-0);
+  line-height: 1.55;
+  font-optical-sizing: auto;
+  font-kerning: normal;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--p1);
+  color: var(--paper);
+}
+
+:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+img,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 760;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+ul,
+ol,
+dl,
+dd,
+figure {
+  margin: 0;
+  padding: 0;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.wrap {
+  width: 100%;
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* A slip: the small paper label that carries text over pigment. */
+.slip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: var(--step--1);
+  font-weight: 560;
+  line-height: 1.2;
+  padding: 0.6em 0.8em;
+  text-decoration: none;
+}
+
+a.slip:hover,
+button.slip:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+button.slip {
+  border: 0;
+  cursor: pointer;
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Section heading row: big heading, quiet companion on the right. */
+.sec-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--gap);
+  padding-block: var(--space-1) clamp(28px, 4vw, 56px);
+}
+
+.sec-head h2 {
+  font-size: var(--step-3);
+}
+
+.sec-head .aside {
+  font-size: var(--step--1);
+  font-weight: 560;
+  color: var(--ink-2);
+}
+
+/* Scroll-driven drop: content spreads from a point like pigment landing on the bath. */
+@keyframes spread {
+  from {
+    clip-path: circle(0% at var(--ox, 50%) var(--oy, 50%));
+  }
+  to {
+    clip-path: circle(142% at var(--ox, 50%) var(--oy, 50%));
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: spread linear both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 38%;
+      animation-timing-function: var(--ease-spread);
+    }
+  }
+}
+
+/* Cross-document navigation lands as a drop from the point that was clicked. */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root) {
+  animation: none;
+}
+
+::view-transition-new(root) {
+  animation: vt-drop 760ms var(--ease-spread) both;
+}
+
+::view-transition-group(nav) {
+  animation: none;
+}
+
+::view-transition-old(nav) {
+  display: none;
+}
+
+::view-transition-new(nav) {
+  animation: none;
+}
+
+@keyframes vt-drop {
+  from {
+    clip-path: circle(0 at var(--vt-x, 50%) var(--vt-y, 30%));
+  }
+  to {
+    clip-path: circle(150vmax at var(--vt-x, 50%) var(--vt-y, 30%));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+}

@@ -1,0 +1,202 @@
+---
+import Icon from './Icon.astro';
+import { load } from '../lib/data';
+import type { Ctx } from '../lib/i18n';
+
+interface Props {
+  ctx: Ctx;
+}
+const { ctx } = Astro.props;
+const { site } = await load();
+const name = ctx.t(site.name);
+---
+<section
+  class="hero"
+  id="top"
+  data-bath
+  data-pigments={JSON.stringify(site.theme.pigments)}
+  data-pattern={site.theme.pattern}
+  data-name={name}
+  data-lifted={ctx.ui('bath.lifted')}
+  style={`--base:${site.theme.pigments[0]}`}
+>
+  <canvas class="bath" aria-hidden="true"></canvas>
+  <p class="visually-hidden">{ctx.ui('bath.alt')}</p>
+  <div class="sheet" aria-hidden="true"></div>
+
+  <div class="title wrap">
+    <h1 class="name">{name}</h1>
+    <p class="facts">
+      <span class="slip">{ctx.t(site.role)}</span>
+      {site.location && <span class="slip">{ctx.t(site.location)}</span>}
+      {
+        site.availability && (
+          <span class="slip avail">
+            <i aria-hidden="true" />
+            {ctx.t(site.availability)}
+          </span>
+        )
+      }
+    </p>
+  </div>
+
+  <div class="tools" role="group" aria-label={ctx.ui('bath.alt')}>
+    <p class="hint slip">
+      <span class="fine">{ctx.ui('bath.hint')}</span><span class="coarse">{ctx.ui('bath.hintTouch')}</span>
+    </p>
+    <div class="buttons">
+      <button class="slip" data-act="next" type="button" title={ctx.ui('bath.next')}>
+        <span class="chip" aria-hidden="true"></span><span class="visually-hidden">{ctx.ui('bath.next')}</span>
+      </button>
+      <button class="slip" data-act="comb" type="button"><Icon name="comb" size={16} />{ctx.ui('bath.comb')}</button>
+      <button class="slip" data-act="fresh" type="button"><Icon name="fresh" size={16} />{ctx.ui('bath.fresh')}</button>
+      <button class="slip" data-act="lift" type="button"><Icon name="download" size={16} />{ctx.ui('bath.lift')}</button>
+    </div>
+    <p class="visually-hidden" role="status"></p>
+  </div>
+</section>
+
+<script>
+  import { mountBath } from '../scripts/bath';
+  const root = document.querySelector<HTMLElement>('[data-bath]');
+  if (root) {
+    const live = mountBath(root);
+    // The close of the page is the print lifted from this bath, whatever the visitor did to it.
+    const print = document.querySelector<HTMLCanvasElement>('canvas[data-lifted-print]');
+    if (print) {
+      new IntersectionObserver((entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          live.liftInto(print);
+          print.classList.add('inked');
+        }
+      }, { rootMargin: '200px' }).observe(print);
+    }
+  }
+</script>
+
+<style>
+  .hero {
+    position: relative;
+    height: 100svh;
+    min-height: 560px;
+    max-height: 1200px;
+    background: var(--base);
+    color: var(--paper);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .bath {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    touch-action: pan-y;
+    cursor: crosshair;
+  }
+  .sheet {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    background: var(--paper) center / cover no-repeat;
+    translate: 0 -101%;
+    pointer-events: none;
+  }
+  .sheet:global(.laying) {
+    transition: translate 360ms var(--ease-sink);
+    translate: 0 0;
+  }
+  .sheet:global(.lifting) {
+    transition:
+      translate 900ms var(--ease-spread),
+      rotate 900ms var(--ease-spread);
+    translate: 0 -104%;
+    rotate: -2.5deg;
+    transform-origin: 0 0;
+  }
+
+  .title {
+    position: absolute;
+    inset: auto 0 clamp(88px, 13vh, 140px);
+    z-index: 2;
+    pointer-events: none;
+  }
+  .name {
+    font-size: var(--step-4);
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    line-height: 0.92;
+    max-width: 12ch;
+    color: var(--paper);
+  }
+  .facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: clamp(16px, 2.4vw, 28px);
+  }
+  .avail i {
+    width: 0.62em;
+    height: 0.62em;
+    border-radius: 50%;
+    background: var(--p3);
+  }
+
+  .tools {
+    position: absolute;
+    z-index: 2;
+    inset: auto var(--gutter) 24px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 6px;
+    pointer-events: none;
+  }
+  .tools > * {
+    pointer-events: auto;
+  }
+  .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .buttons :global(.icon) {
+    flex: none;
+  }
+  .chip {
+    width: 1.15em;
+    height: 1.15em;
+    border-radius: 50%;
+    background: var(--p2);
+    transition: background-color 300ms;
+  }
+  .hint {
+    color: var(--ink-2);
+    font-weight: 500;
+  }
+  .hero:global(.touched) .hint {
+    visibility: hidden;
+  }
+  .coarse {
+    display: none;
+  }
+  @media (pointer: coarse) {
+    .fine {
+      display: none;
+    }
+    .coarse {
+      display: inline;
+    }
+  }
+  .hero:not(:global(.live)) .tools {
+    display: none;
+  }
+  @media (max-width: 640px) {
+    .title {
+      bottom: 132px;
+    }
+    .hint {
+      display: none;
+    }
+  }
+</style>

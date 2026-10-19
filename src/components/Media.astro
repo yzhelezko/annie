@@ -1,0 +1,140 @@
+---
+import { Picture, getImage } from 'astro:assets';
+import Icon from './Icon.astro';
+import type { Resolved } from '../lib/media';
+import type { Ctx } from '../lib/i18n';
+
+interface Props {
+  ctx: Ctx;
+  res: Resolved;
+  alt: string;
+  /** "16/9"; when set the media fills a fixed frame (object-fit: cover). */
+  ratio?: string;
+  sizes: string;
+  controls?: boolean;
+  eager?: boolean;
+}
+const { ctx, res, alt, ratio, sizes, controls = false, eager = false } = Astro.props;
+const ALL = [480, 720, 960, 1280, 1600, 1920, 2560];
+const widths = (w: number) => {
+  const list = ALL.filter((x) => x < w);
+  return list.length && list[list.length - 1] >= w * 0.9 ? list : [...list, w];
+};
+const style = ratio ? `aspect-ratio:${ratio}` : undefined;
+const poster = res.kind === 'video' && res.poster ? (await getImage({ src: res.poster, width: Math.min(1920, res.poster.width), format: 'webp' })).src : undefined;
+const ytThumb = res.kind === 'youtube' ? `https://i.ytimg.com/vi/${res.id}/maxresdefault.jpg` : undefined;
+---
+{
+  res.kind === 'image' && (
+    <Picture
+      class:list={['m', { fill: !!ratio }]}
+      style={style}
+      src={res.img}
+      alt={alt}
+      formats={['avif', 'webp']}
+      widths={widths(res.img.width)}
+      sizes={sizes}
+      loading={eager ? 'eager' : 'lazy'}
+      fetchpriority={eager ? 'high' : undefined}
+      decoding="async"
+    />
+  )
+}
+{res.kind === 'remote' && <img class:list={['m', { fill: !!ratio }]} style={style} src={res.url} alt={alt} loading={eager ? 'eager' : 'lazy'} decoding="async" />}
+{
+  res.kind === 'video' && (
+    <div class:list={['m vid', { fill: !!ratio }]} style={style} data-video={controls ? 'controls' : 'loop'}>
+      <video
+        playsinline
+        muted={!controls}
+        loop={!controls}
+        controls={controls}
+        preload={controls ? 'metadata' : 'none'}
+        poster={poster}
+        aria-label={alt || undefined}
+      >
+        <source src={res.url} type={res.type} />
+      </video>
+      {!controls && (
+        <button class="slip vctl" type="button" data-play={ctx.ui('work.play')} data-pause={ctx.ui('work.pause')} aria-label={ctx.ui('work.play')}>
+          <Icon name="play" size={14} />
+          <Icon name="pause" size={14} />
+        </button>
+      )}
+    </div>
+  )
+}
+{
+  (res.kind === 'youtube' || res.kind === 'vimeo') && (
+    <div class:list={['m embed', { fill: true }]} style={`aspect-ratio:${ratio ?? '16/9'}`} data-embed={res.kind} data-id={res.id}>
+      {ytThumb && <img src={ytThumb} alt="" loading="lazy" decoding="async" />}
+      <button class="slip play" type="button">
+        <Icon name="play" size={16} />
+        {ctx.ui('work.play')}
+        {alt && <span class="visually-hidden">: {alt}</span>}
+      </button>
+    </div>
+  )
+}
+
+<style is:global>
+  .m {
+    width: 100%;
+    height: auto;
+    background: var(--hair);
+  }
+  .m.fill {
+    object-fit: cover;
+    height: 100%;
+  }
+  picture {
+    display: block;
+  }
+  picture:has(> .fill) {
+    width: 100%;
+    height: 100%;
+  }
+  .vid,
+  .embed {
+    position: relative;
+    overflow: hidden;
+  }
+  .vid video {
+    width: 100%;
+    height: auto;
+  }
+  .vid.fill video,
+  .embed img,
+  .embed iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 0;
+  }
+  .vctl {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    padding: 0.55em;
+  }
+  .vctl .icon-pause,
+  [data-state='playing'] > .vctl .icon-play {
+    display: none;
+  }
+  [data-state='playing'] > .vctl .icon-pause {
+    display: block;
+  }
+  .embed {
+    background: var(--ink);
+  }
+  .embed .play {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+    font-size: var(--step-0);
+    padding: 0.8em 1.1em;
+  }
+</style>

@@ -1,0 +1,72 @@
+---
+import ProjectCard from './ProjectCard.astro';
+import { load } from '../lib/data';
+import type { Ctx } from '../lib/i18n';
+
+interface Props {
+  ctx: Ctx;
+}
+const { ctx } = Astro.props;
+const { site, projects } = await load();
+const list = projects.filter((p) => p.data.home);
+const pig = site.theme.pigments;
+---
+<section class="work wrap" id="work" aria-labelledby="work-h">
+  <header class="sec-head">
+    <h2 id="work-h">{ctx.ui('work.title')}</h2>
+    <p class="aside tnum">{String(list.length).padStart(2, '0')}</p>
+  </header>
+  {
+    list.length ? (
+      <ul class="grid">
+        {list.map((p, i) => (
+          <ProjectCard ctx={ctx} project={p} color={pig[i % pig.length]} eager={i === 0} />
+        ))}
+      </ul>
+    ) : (
+      <p class="empty">{ctx.ui('work.empty')}</p>
+    )
+  }
+</section>
+
+<style>
+  .work {
+    padding-bottom: var(--space-1);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-auto-flow: dense;
+    gap: clamp(36px, 5vw, 80px) var(--gap);
+  }
+  .grid > :global(.size-full) {
+    grid-column: span 12;
+  }
+  .grid > :global(.size-wide) {
+    grid-column: span 8;
+  }
+  .grid > :global(.size-half) {
+    grid-column: span 6;
+  }
+  .grid > :global(.size-third) {
+    grid-column: span 4;
+  }
+  @media (max-width: 900px) {
+    .grid > :global(.size-wide),
+    .grid > :global(.size-half) {
+      grid-column: span 12;
+    }
+    .grid > :global(.size-third) {
+      grid-column: span 6;
+    }
+  }
+  @media (max-width: 560px) {
+    .grid > :global(*) {
+      grid-column: span 12 !important;
+    }
+  }
+  .empty {
+    font-size: var(--step-1);
+    padding-bottom: var(--space-1);
+  }
+</style>

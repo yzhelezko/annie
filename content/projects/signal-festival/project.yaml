@@ -1,0 +1,29 @@
+title:
+  en: Signal festival titles
+  ru: Титры фестиваля Signal
+  uk: Титри фестивалю Signal
+year: 2025
+client: Signal (demo)
+role:
+  en: Title sequence, motion system
+  ru: Титры, моушн-система
+  uk: Титри, моушн-система
+tags:
+  - { en: Motion, ru: Моушн, uk: Моушн }
+  - { en: Titles, ru: Титры, uk: Титри }
+summary:
+  en: "Demo project. Opening titles where the type is combed through paint, frame by frame."
+  ru: "Демо-проект. Вступительные титры, где шрифт прочёсывается сквозь краску, кадр за кадром."
+  uk: "Демо-проєкт. Вступні титри, де шрифт розчісується крізь фарбу, кадр за кадром."
+cover: signal.mp4
+size: wide
+color: "#10835c"
+order: 2
+demo: true
+blocks:
+  - src: signal.mp4
+    width: wide
+  - row:
+      - src: titles-1.jpg
+      - src: titles-2.jpg
+    caption: { en: Title cards, ru: Титульные карточки, uk: Титульні картки }

@@ -1,0 +1,258 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import Blocks from '../components/blocks/Blocks.astro';
+import { load, dirOf, type Project } from '../lib/data';
+import { resolve } from '../lib/media';
+import type { Ctx } from '../lib/i18n';
+
+interface Props {
+  ctx: Ctx;
+  project: Project;
+}
+const { ctx, project } = Astro.props;
+const { site, projects } = await load();
+const d = project.data;
+const dir = dirOf(project.filePath);
+const pig = site.theme.pigments;
+const index = projects.indexOf(project);
+const color = d.color ?? pig[index % pig.length];
+const colors = d.palette ?? [color, ...pig.filter((c) => c !== color)];
+const next = projects[(index + 1) % projects.length];
+const nextColor = next.data.color ?? pig[((index + 1) % projects.length) % pig.length];
+const title = ctx.t(d.title);
+const cover = resolve(d.cover, dir, `${project.filePath} → cover`, d.poster);
+const og = cover.kind === 'image' ? cover.img : cover.kind === 'video' ? cover.poster : undefined;
+const facts = [
+  d.client && { k: ctx.ui('work.client'), v: ctx.t(d.client) },
+  { k: ctx.ui('work.year'), v: d.year },
+  d.role && { k: ctx.ui('work.role'), v: ctx.t(d.role) },
+].filter(Boolean) as { k: string; v: string }[];
+---
+<Base ctx={ctx} title={title} description={ctx.t(d.summary) || undefined} ogImage={og}>
+  <header class="head" style={`--c:${color}`}>
+    <canvas class="print" data-print={project.id} data-colors={JSON.stringify(colors)} aria-hidden="true"></canvas>
+    <div class="inner wrap">
+      <a class="slip back" href={`${ctx.href()}#work`}><Icon name="back" size={16} />{ctx.ui('work.back')}</a>
+      <h1>{title}</h1>
+      <dl class="facts">
+        {
+          facts.map((f) => (
+            <div class="slip">
+              <dt>{f.k}</dt>
+              <dd>{f.v}</dd>
+            </div>
+          ))
+        }
+        {d.demo && <div class="slip"><dd>{ctx.ui('work.demo')}</dd></div>}
+      </dl>
+    </div>
+  </header>
+
+  {
+    (d.summary || d.tags.length > 0) && (
+      <section class="lead wrap">
+        {d.summary && <p>{ctx.t(d.summary)}</p>}
+        {d.tags.length > 0 && (
+          <ul class="tags">
+            {d.tags.map((t) => <li>{ctx.t(t)}</li>)}
+          </ul>
+        )}
+      </section>
+    )
+  }
+
+  <Blocks ctx={ctx} project={project} dir={dir} />
+
+  {
+    (d.credits.length > 0 || d.links.length > 0) && (
+      <section class="credits wrap">
+        {d.credits.length > 0 && (
+          <>
+            <h2>{ctx.ui('work.credits')}</h2>
+            <dl>
+              {d.credits.map((c) => (
+                <div>
+                  <dt>{ctx.t(c.role)}</dt>
+                  <dd>{c.name}</dd>
+                </div>
+              ))}
+            </dl>
+          </>
+        )}
+        {d.links.length > 0 && (
+          <p class="links">
+            {d.links.map((l) => (
+              <a class="slip" href={l.url} rel="noopener" target="_blank">
+                {ctx.t(l.label)}
+                <Icon name="external" size={14} />
+              </a>
+            ))}
+          </p>
+        )}
+      </section>
+    )
+  }
+
+  {
+    next !== project && (
+      <a class="next" href={ctx.href(`work/${next.id}/`)} style={`--c:${nextColor}`}>
+        <span class="k">{ctx.ui('work.next')}</span>
+        <span class="t">{ctx.t(next.data.title)}</span>
+        <Icon name="arrow" size={40} />
+      </a>
+    )
+  }
+</Base>
+
+<script>
+  import '../scripts/print';
+</script>
+
+<style>
+  .head {
+    position: relative;
+    min-height: min(78svh, 820px);
+    display: flex;
+    align-items: flex-end;
+    background: var(--c);
+    color: var(--paper);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .print {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+  .inner {
+    padding-block: 120px clamp(28px, 4vw, 56px);
+  }
+  .back {
+    margin-bottom: clamp(20px, 4vw, 48px);
+  }
+  h1 {
+    font-size: clamp(2.5rem, 1rem + 6.4vw, 7.5rem);
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    line-height: 0.95;
+    max-width: 14ch;
+  }
+  .facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: clamp(20px, 3vw, 32px);
+  }
+  .facts dt {
+    color: var(--ink-2);
+    font-weight: 500;
+  }
+  .lead {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 24px var(--gap);
+    padding-block: var(--space-1) clamp(16px, 2vw, 32px);
+  }
+  .lead p {
+    grid-column: 1 / span 8;
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    font-weight: 500;
+    line-height: 1.22;
+    letter-spacing: -0.025em;
+    max-width: 30ch;
+  }
+  .tags {
+    grid-column: 10 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: start;
+    gap: 6px;
+  }
+  .tags li {
+    font-size: var(--step--1);
+    font-weight: 600;
+    padding: 0.4em 0.8em;
+    border: 1.5px solid var(--ink);
+    border-radius: 999px;
+  }
+  @media (max-width: 900px) {
+    .lead p,
+    .tags {
+      grid-column: 1 / -1;
+    }
+  }
+  .credits {
+    padding-bottom: var(--space-1);
+    max-width: calc(760px + 2 * var(--gutter));
+  }
+  .credits h2 {
+    font-size: var(--step-1);
+    margin-bottom: 16px;
+  }
+  .credits dl div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--gap);
+    padding-block: 10px;
+    border-top: 1.5px solid var(--ink);
+  }
+  .credits dt {
+    color: var(--ink-2);
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 24px;
+  }
+  .links .slip {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .next {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 8px var(--gap);
+    padding: var(--space-1) var(--gutter) clamp(32px, 5vw, 64px);
+    text-decoration: none;
+    isolation: isolate;
+    color: var(--ink);
+    transition: color 250ms;
+  }
+  .next::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--c);
+    clip-path: circle(0 at 0 100%);
+    transition: clip-path 700ms var(--ease-spread);
+  }
+  .next:hover,
+  .next:focus-visible {
+    color: var(--paper);
+  }
+  .next:hover::before,
+  .next:focus-visible::before {
+    clip-path: circle(150% at 0 100%);
+  }
+  .next .k {
+    grid-column: 1 / -1;
+    font-size: var(--step--1);
+    font-weight: 600;
+  }
+  .next .t {
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    font-weight: 780;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+</style>

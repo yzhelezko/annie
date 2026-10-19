@@ -1,0 +1,93 @@
+---
+import '@fontsource-variable/unbounded';
+import '@fontsource-variable/commissioner';
+import '../styles/global.css';
+import unbLatin from '@fontsource-variable/unbounded/files/unbounded-latin-wght-normal.woff2?url';
+import unbCyr from '@fontsource-variable/unbounded/files/unbounded-cyrillic-wght-normal.woff2?url';
+import { getImage } from 'astro:assets';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { load } from '../lib/data';
+import { image } from '../lib/media';
+import type { Ctx } from '../lib/i18n';
+
+interface Props {
+  ctx: Ctx;
+  title?: string;
+  description?: string;
+  ogImage?: ImageMetadata;
+  jsonld?: object;
+}
+const { ctx, title, description, ogImage, jsonld } = Astro.props;
+const { site } = await load();
+const name = ctx.t(site.name);
+const fullTitle = title ? `${title} — ${name}` : `${name} — ${ctx.t(site.role)}`;
+const desc = description || ctx.t(site.seo.description);
+const abs = (p: string) => (Astro.site ? new URL(p, Astro.site).href : p);
+const og = ogImage ?? (site.seo.image ? image(site.seo.image, 'content/media', 'site.yaml → seo.image') : undefined);
+const ogUrl = og ? (await getImage({ src: og, width: 1200, height: 630, fit: 'cover', format: 'jpg' })).src : undefined;
+const cyr = ['ru', 'uk', 'be', 'bg', 'sr', 'kk'].includes(ctx.lang);
+
+const t = site.theme;
+const vars = [`--paper:${t.paper}`, `--ink:${t.ink}`, ...t.pigments.map((c, i) => `--p${i + 1}:${c}`)].join(';');
+---
+<!doctype html>
+<html lang={ctx.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={desc} />
+    <meta name="theme-color" content={t.paper} />
+    <link rel="canonical" href={abs(ctx.href(ctx.path))} />
+    {ctx.langs.map((l) => <link rel="alternate" hreflang={l.code} href={abs(ctx.href(ctx.path, l.code))} />)}
+    <link rel="alternate" hreflang="x-default" href={abs(ctx.href(ctx.path, ctx.def))} />
+    <link rel="icon" href={ctx.asset('favicon.svg')} type="image/svg+xml" />
+    <link rel="sitemap" href={ctx.asset('sitemap-index.xml')} />
+    <link rel="preload" href={cyr ? unbCyr : unbLatin} as="font" type="font/woff2" crossorigin />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={desc} />
+    <meta property="og:locale" content={ctx.lang} />
+    {ogUrl && <meta property="og:image" content={abs(ogUrl)} />}
+    {ogUrl && <meta name="twitter:card" content="summary_large_image" />}
+    <style is:inline set:html={`:root{${vars}}`} />
+    <script is:inline>
+      // Navigation lands as a drop from the last click (read before first paint).
+      try {
+        const d = sessionStorage.getItem('drop');
+        if (d) {
+          const [x, y] = d.split(',');
+          document.documentElement.style.setProperty('--vt-x', x + 'px');
+          document.documentElement.style.setProperty('--vt-y', y + 'px');
+        }
+      } catch {}
+    </script>
+    {jsonld && <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />}
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip slip" href="#main">{ctx.ui('nav.skip')}</a>
+    <Nav ctx={ctx} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer ctx={ctx} />
+    <script>
+      import '../scripts/site';
+    </script>
+  </body>
+</html>
+
+<style>
+  .skip {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 100;
+    translate: 0 -200%;
+  }
+  .skip:focus {
+    translate: 0 0;
+  }
+</style>

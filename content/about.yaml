@@ -1,0 +1,26 @@
+# Блок «Обо мне» на главной.
+# portrait — файл в content/media/ (необязательно, удалите строку, чтобы скрыть)
+portrait: portrait.jpg
+portraitAlt:
+  en: Portrait (placeholder)
+  ru: Портрет (заглушка)
+  uk: Портрет (заглушка)
+
+# Абзацы текста
+bio:
+  - en: "Placeholder bio. I design identities that move: logos built to animate, type systems with a sense of timing, and posters that know they will also live on a screen."
+    ru: "Текст-заглушка. Я проектирую айдентику, которая движется: логотипы, созданные для анимации, шрифтовые системы с чувством ритма и плакаты, которые знают, что будут жить и на экране."
+    uk: "Текст-заглушка. Я проєктую айдентику, що рухається: логотипи, створені для анімації, шрифтові системи з відчуттям ритму та плакати, які знають, що житимуть і на екрані."
+  - en: "Replace these paragraphs in content/about.yaml — any number of them, in every language."
+    ru: "Замените эти абзацы в content/about.yaml — сколько угодно, на каждом языке."
+    uk: "Замініть ці абзаци в content/about.yaml — скільки завгодно, кожною мовою."
+
+services:
+  - { en: Brand identity, ru: Айдентика, uk: Айдентика }
+  - { en: Logo animation, ru: Анимация логотипов, uk: Анімація логотипів }
+  - { en: Motion design & titles, ru: Моушн-дизайн и титры, uk: Моушн-дизайн і титри }
+  - { en: Posters & print, ru: Плакаты и полиграфия, uk: Плакати й поліграфія }
+  - { en: Type & lettering, ru: Шрифт и леттеринг, uk: Шрифт і леттеринг }
+
+# Реальные клиенты. Пусто — блок скрыт. Не вписывайте тех, с кем не работали.
+clients: []

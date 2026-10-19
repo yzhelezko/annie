@@ -1,0 +1,27 @@
+title:
+  en: Tide typeface
+  ru: Шрифт Tide
+  uk: Шрифт Tide
+year: 2024
+client: { en: Self-initiated (demo), ru: Личный проект (демо), uk: Власний проєкт (демо) }
+role:
+  en: Type design
+  ru: Шрифтовой дизайн
+  uk: Шрифтовий дизайн
+tags:
+  - { en: Type, ru: Шрифт, uk: Шрифт }
+summary:
+  en: "Demo project. A wide display face with full Ukrainian Cyrillic."
+  ru: "Демо-проект. Широкий акцидентный шрифт с полной украинской кириллицей."
+  uk: "Демо-проєкт. Широкий акцидентний шрифт із повною українською кирилицею."
+cover: cover.jpg
+size: half
+color: "#23349c"
+order: 4
+demo: true
+blocks:
+  - gallery:                      # сетка картинок; columns: 2–4
+      - glyph-1.jpg
+      - glyph-2.jpg
+      - glyph-3.jpg
+    columns: 3

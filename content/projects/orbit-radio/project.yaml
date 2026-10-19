@@ -1,0 +1,28 @@
+title:
+  en: Orbit FM
+  ru: Orbit FM
+  uk: Orbit FM
+year: 2025
+client: Orbit FM (demo)
+role:
+  en: Animated logo
+  ru: Анимированный логотип
+  uk: Анімований логотип
+tags:
+  - { en: Logo, ru: Логотип, uk: Логотип }
+  - { en: Motion, ru: Моушн, uk: Моушн }
+summary:
+  en: "Demo project. A radio logo that swirls like a record on the turntable."
+  ru: "Демо-проект. Логотип радио, который закручивается, как пластинка на проигрывателе."
+  uk: "Демо-проєкт. Логотип радіо, що закручується, як платівка на програвачі."
+cover: orbit.mp4
+size: third
+color: "#5a2b6b"
+order: 3
+demo: true
+blocks:
+  - src: orbit.mp4
+    width: narrow
+    ratio: 1/1
+  - src: logo.jpg
+    width: wide

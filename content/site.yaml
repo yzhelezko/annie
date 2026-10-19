@@ -1,0 +1,74 @@
+# ─────────────────────────────────────────────────────────────
+#  Основные данные сайта.
+#  Любой текст можно писать одной строкой (одинаково для всех языков)
+#  или по языкам:   title: { en: "…", ru: "…", uk: "…" }
+# ─────────────────────────────────────────────────────────────
+
+name:
+  en: Annie Demo
+  ru: Энни Демо
+  uk: Енні Демо
+
+role:
+  en: Graphic & motion design
+  ru: Графический и моушн-дизайн
+  uk: Графічний і моушн-дизайн
+
+location:
+  en: Kyiv — remote worldwide
+  ru: Киев — удалённо по всему миру
+  uk: Київ — віддалено по всьому світу
+
+# Короткая строка о доступности. Удалите строку, чтобы скрыть.
+availability:
+  en: Booking projects from January 2027
+  ru: Беру проекты с января 2027
+  uk: Беру проєкти з січня 2027
+
+email: hello@example.com
+
+socials:
+  - label: Behance
+    url: https://www.behance.net/
+  - label: Instagram
+    url: https://www.instagram.com/
+  - label: Vimeo
+    url: https://vimeo.com/
+  - label: Telegram
+    url: https://t.me/
+
+# Языки сайта. Первый — язык по умолчанию (открывается по адресу «/»).
+# Чтобы добавить язык: допишите его сюда и добавьте переводы в ui.yaml.
+languages:
+  - code: en
+    label: EN
+    name: English
+  - code: ru
+    label: RU
+    name: Русский
+  - code: uk
+    label: UA
+    name: Українська
+
+seo:
+  description:
+    en: "Portfolio and CV — graphic and motion design: identity, posters, animated logos and titles."
+    ru: "Портфолио и CV — графический и моушн-дизайн: айдентика, плакаты, анимированные логотипы и титры."
+    uk: "Портфоліо та CV — графічний і моушн-дизайн: айдентика, плакати, анімовані логотипи й титри."
+  # Картинка для превью ссылок (1200×630), лежит в content/media/
+  image: og.jpg
+
+# Цвета. Пигменты — краски «ванны» на главной: берите насыщенные
+# и достаточно тёмные, чтобы белое имя читалось поверх.
+theme:
+  paper: "#efefea"
+  ink: "#141416"
+  pigments:
+    - "#23349c"   # индиго
+    - "#c42b2b"   # красный
+    - "#10835c"   # малахит
+    - "#a86c0c"   # охра
+    - "#17171c"   # сажа
+    - "#5a2b6b"   # слива
+  # Узор ванны: battal (капли) · gelgit (волна) · tarakli (гребень) · bulbul (вихри) · random
+  pattern: random

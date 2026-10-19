@@ -1,0 +1,68 @@
+# Тексты интерфейса. Ключи не меняйте — только значения.
+nav:
+  work: { en: Work, ru: Работы, uk: Роботи }
+  about: { en: About, ru: Обо мне, uk: Про мене }
+  cv: { en: CV, ru: CV, uk: CV }
+  contact: { en: Contact, ru: Контакты, uk: Контакти }
+  menu: { en: Menu, ru: Меню, uk: Меню }
+  close: { en: Close, ru: Закрыть, uk: Закрити }
+  language: { en: Language, ru: Язык, uk: Мова }
+  home: { en: Home, ru: Главная, uk: Головна }
+  skip: { en: Skip to content, ru: Перейти к содержимому, uk: Перейти до змісту }
+
+bath:
+  hint: { en: "Drag to comb the paint · click to drop a colour", ru: "Ведите, чтобы прочесать краску · нажмите, чтобы капнуть цвет", uk: "Ведіть, щоб розчесати фарбу · натисніть, щоб капнути колір" }
+  hintTouch: { en: "Swipe sideways to comb · tap to drop a colour", ru: "Ведите вбок, чтобы прочесать · коснитесь, чтобы капнуть", uk: "Ведіть убік, щоб розчесати · торкніться, щоб капнути" }
+  next: { en: Next colour, ru: Следующий цвет, uk: Наступний колір }
+  comb: { en: Comb, ru: Прочесать, uk: Розчесати }
+  fresh: { en: New bath, ru: Новая ванна, uk: Нова ванна }
+  lift: { en: Lift a print, ru: Снять оттиск, uk: Зняти відбиток }
+  lifted: { en: Print saved — it is the only one, ru: Оттиск сохранён — он единственный, uk: Відбиток збережено — він єдиний }
+  alt: { en: "Live marbling bath: pigments floating on water, combed into patterns.", ru: "Живая ванна эбру: краски плавают на воде и прочёсываются в узоры.", uk: "Жива ванна ебру: фарби плавають на воді й розчісуються у візерунки." }
+
+work:
+  title: { en: Selected work, ru: Избранные работы, uk: Вибрані роботи }
+  all: { en: All projects, ru: Все проекты, uk: Усі проєкти }
+  view: { en: View project, ru: Смотреть проект, uk: Дивитися проєкт }
+  next: { en: Next project, ru: Следующий проект, uk: Наступний проєкт }
+  back: { en: All work, ru: Все работы, uk: Усі роботи }
+  client: { en: Client, ru: Клиент, uk: Клієнт }
+  year: { en: Year, ru: Год, uk: Рік }
+  role: { en: Role, ru: Роль, uk: Роль }
+  credits: { en: Credits, ru: Команда, uk: Команда }
+  demo: { en: Demo, ru: Демо, uk: Демо }
+  play: { en: Play video, ru: Смотреть видео, uk: Дивитися відео }
+  pause: { en: Pause, ru: Пауза, uk: Пауза }
+  empty: { en: Projects will appear here soon., ru: Проекты скоро появятся., uk: Проєкти скоро з'являться. }
+
+about:
+  title: { en: About, ru: Обо мне, uk: Про мене }
+  services: { en: What I do, ru: Чем занимаюсь, uk: Чим займаюся }
+  clients: { en: Clients, ru: Клиенты, uk: Клієнти }
+
+cv:
+  title: { en: Curriculum vitae, ru: Резюме, uk: Резюме }
+  experience: { en: Experience, ru: Опыт, uk: Досвід }
+  education: { en: Education, ru: Образование, uk: Освіта }
+  skills: { en: Skills, ru: Навыки, uk: Навички }
+  tools: { en: Tools, ru: Инструменты, uk: Інструменти }
+  awards: { en: Recognition, ru: Награды, uk: Нагороди }
+  languages: { en: Languages, ru: Языки, uk: Мови }
+  present: { en: now, ru: сейчас, uk: зараз }
+  download: { en: Download PDF, ru: Скачать PDF, uk: Завантажити PDF }
+  print: { en: Print / save as PDF, ru: Распечатать / сохранить PDF, uk: Друк / зберегти PDF }
+  full: { en: Full CV, ru: Полное резюме, uk: Повне резюме }
+
+contact:
+  title: { en: Let's make something, ru: Давайте сделаем проект, uk: Зробимо проєкт разом }
+  write: { en: Write to me, ru: Напишите мне, uk: Напишіть мені }
+  copy: { en: Copy email, ru: Скопировать почту, uk: Скопіювати пошту }
+  copied: { en: Copied, ru: Скопировано, uk: Скопійовано }
+
+footer:
+  top: { en: Back to top, ru: Наверх, uk: Нагору }
+  rights: { en: All work shown with permission of its clients., ru: Все работы показаны с разрешения клиентов., uk: Усі роботи показано з дозволу клієнтів. }
+
+notFound:
+  title: { en: This page sank, ru: Страница утонула, uk: Сторінка потонула }
+  text: { en: The paint moved on. Try the home page., ru: Краска уплыла. Начните с главной., uk: Фарба попливла. Почніть із головної. }

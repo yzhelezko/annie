@@ -1,0 +1,139 @@
+---
+import Media from './Media.astro';
+import { load } from '../lib/data';
+import { resolve } from '../lib/media';
+import type { Ctx } from '../lib/i18n';
+
+interface Props {
+  ctx: Ctx;
+}
+const { ctx } = Astro.props;
+const { about } = await load();
+const portrait = about.portrait ? resolve(about.portrait, 'content/media', 'about.yaml → portrait') : undefined;
+const [lead, ...rest] = about.bio.map(ctx.t);
+const clients = about.clients.map((c) => (typeof c === 'string' ? { name: c, url: undefined } : c));
+---
+<section class="about" id="about" aria-labelledby="about-h">
+  <div class="field reveal" aria-hidden="true"></div>
+  <div class="inner wrap">
+    <h2 id="about-h">{ctx.ui('about.title')}</h2>
+    <div class="text">
+      {lead && <p class="lead">{lead}</p>}
+      {rest.map((p) => <p>{p}</p>)}
+    </div>
+    {
+      portrait && (
+        <figure class="portrait">
+          <Media ctx={ctx} res={portrait} alt={ctx.t(about.portraitAlt)} ratio="4/5" sizes="(min-width: 900px) 30vw, 80vw" />
+        </figure>
+      )
+    }
+    {
+      about.services.length > 0 && (
+        <div class="services">
+          <h3>{ctx.ui('about.services')}</h3>
+          <ul>
+            {about.services.map((s) => <li>{ctx.t(s)}</li>)}
+          </ul>
+        </div>
+      )
+    }
+    {
+      clients.length > 0 && (
+        <div class="clients">
+          <h3>{ctx.ui('about.clients')}</h3>
+          <ul>
+            {clients.map((c) => <li>{c.url ? <a href={c.url}>{c.name}</a> : c.name}</li>)}
+          </ul>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .about {
+    position: relative;
+    color: var(--paper);
+    --soft: color-mix(in srgb, var(--paper) 78%, var(--p1));
+    isolation: isolate;
+  }
+  /* one drop of pigment spreads to become the section's ground */
+  .field {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--p1);
+    --ox: 12%;
+    --oy: 0%;
+  }
+  .inner {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: clamp(32px, 4vw, 64px) var(--gap);
+    padding-block: var(--space-1) var(--space-2);
+  }
+  h2 {
+    grid-column: 1 / -1;
+    font-size: var(--step-3);
+  }
+  .text {
+    grid-column: 1 / span 7;
+    display: grid;
+    gap: 1.1em;
+    max-width: 62ch;
+    color: var(--soft);
+  }
+  .lead {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    font-weight: 500;
+    line-height: 1.22;
+    letter-spacing: -0.025em;
+    color: var(--paper);
+  }
+  .portrait {
+    grid-column: 9 / span 4;
+    grid-row: 2 / span 2;
+    align-self: start;
+  }
+  .services,
+  .clients {
+    grid-column: 1 / span 7;
+  }
+  h3 {
+    font-size: var(--step--1);
+    font-family: var(--font-text);
+    font-weight: 650;
+    letter-spacing: 0;
+    margin-bottom: 14px;
+    color: var(--soft);
+  }
+  .services ul,
+  .clients ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .services li,
+  .clients li {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    padding: 0.35em 0.7em;
+    border: 1.5px solid var(--paper);
+    border-radius: 999px;
+  }
+  @media (max-width: 900px) {
+    .text,
+    .services,
+    .clients {
+      grid-column: 1 / -1;
+    }
+    .portrait {
+      grid-column: 1 / span 9;
+      grid-row: auto;
+    }
+  }
+</style>

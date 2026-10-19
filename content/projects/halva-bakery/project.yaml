@@ -1,0 +1,51 @@
+# ── Проект ───────────────────────────────────────────────
+# Все файлы (картинки, видео) лежат рядом с этим файлом.
+# Тексты: строкой или по языкам { en: …, ru: …, uk: … }.
+title:
+  en: Halva bakery
+  ru: Пекарня «Халва»
+  uk: Пекарня «Халва»
+year: 2026
+client: Halva (demo)
+role:
+  en: Identity, packaging, logo animation
+  ru: Айдентика, упаковка, анимация логотипа
+  uk: Айдентика, пакування, анімація логотипа
+tags:
+  - { en: Identity, ru: Айдентика, uk: Айдентика }
+  - { en: Motion, ru: Моушн, uk: Моушн }
+summary:
+  en: "Demo project. A sugar-and-sesame identity: one marbled pattern per batch, so no two boxes are the same."
+  ru: "Демо-проект. Айдентика из сахара и кунжута: свой мраморный узор на каждую партию — две одинаковые коробки не встретятся."
+  uk: "Демо-проєкт. Айдентика з цукру й кунжуту: свій мармуровий візерунок на кожну партію — двох однакових коробок не буде."
+
+# Обложка на главной: картинка или видео (видео крутится без звука)
+cover: cover.jpg
+# Размер карточки на главной: full · wide · half · third
+size: full
+# Цвет проекта (заливка при наведении и «оттиск» в шапке)
+color: "#a86c0c"
+order: 1
+demo: true          # уберите, когда замените на настоящий проект
+
+# Содержимое страницы — блоки сверху вниз.
+blocks:
+  - src: loop.mp4                 # видео: постер подхватится из loop.jpg
+    width: full                   # full · wide · narrow
+  - text:
+      en: "Placeholder text block. Describe the brief, the idea and what changed for the client."
+      ru: "Текстовый блок-заглушка. Опишите задачу, идею и что изменилось для клиента."
+      uk: "Текстовий блок-заглушка. Опишіть задачу, ідею і що змінилося для клієнта."
+  - row:                          # 2–4 медиа в ряд
+      - src: logo.jpg
+        ratio: 16/10
+      - src: poster.jpg
+        ratio: 16/10
+    caption:
+      en: Logo and poster (demo)
+      ru: Логотип и плакат (демо)
+      uk: Логотип і плакат (демо)
+
+credits:
+  - role: { en: Design & animation, ru: Дизайн и анимация, uk: Дизайн і анімація }
+    name: Annie Demo

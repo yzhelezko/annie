@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Work from '../components/Work.astro';
+import About from '../components/About.astro';
+import CvSummary from '../components/CvSummary.astro';
+import Contact from '../components/Contact.astro';
+import { load } from '../lib/data';
+import type { Ctx } from '../lib/i18n';
+
+interface Props {
+  ctx: Ctx;
+}
+const { ctx } = Astro.props;
+const { site } = await load();
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: ctx.t(site.name),
+  jobTitle: ctx.t(site.role),
+  email: `mailto:${site.email}`,
+  sameAs: site.socials.map((s) => s.url),
+};
+---
+<Base ctx={ctx} jsonld={jsonld}>
+  <Hero ctx={ctx} />
+  <Work ctx={ctx} />
+  <About ctx={ctx} />
+  <CvSummary ctx={ctx} />
+  <Contact ctx={ctx} />
+</Base>
