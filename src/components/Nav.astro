@@ -16,19 +16,25 @@ const links = [
   { label: ctx.ui('nav.contact'), href: `${home}#contact` },
 ];
 const current = (href: string) => href === ctx.href(ctx.path);
+// on the home page, section links stay in-page so nothing reloads (and the bath keeps its paint)
+const inPage = (href: string) => (ctx.path === '' && href.startsWith(home + '#') ? href.slice(home.length) : href);
 ---
 <header class="nav">
-  <a class="slip mark" href={home} aria-label={ctx.ui('nav.home')}>{ctx.t(site.name)}</a>
+  <a class="slip mark" href={ctx.path === '' ? '#top' : home} aria-label={ctx.ui('nav.home')}>{ctx.t(site.name)}</a>
   <nav class="slip links" aria-label={ctx.ui('nav.menu')}>
-    {links.map((l) => <a href={l.href} aria-current={current(l.href) ? 'page' : undefined}>{l.label}</a>)}
+    {links.map((l) => <a href={inPage(l.href)} aria-current={current(l.href) ? 'page' : undefined}>{l.label}</a>)}
   </nav>
   <ul class="slip langs" aria-label={ctx.ui('nav.language')}>
     {
       ctx.langs.map((l) => (
         <li>
-          <a href={ctx.href(ctx.path, l.code)} hreflang={l.code} lang={l.code} title={l.name} aria-current={l.code === ctx.lang ? 'true' : undefined}>
-            {l.label}
-          </a>
+          {l.code === ctx.lang ? (
+            <span class="here" lang={l.code} title={l.name} aria-current="true">{l.label}</span>
+          ) : (
+            <a href={ctx.href(ctx.path, l.code)} hreflang={l.code} lang={l.code} title={l.name}>
+              {l.label}
+            </a>
+          )}
         </li>
       ))
     }
@@ -41,15 +47,19 @@ const current = (href: string) => href === ctx.href(ctx.path);
       {ctx.ui('nav.close')}<Icon name="close" size={16} />
     </button>
     <ul class="menu-links">
-      {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      {links.map((l) => <li><a href={inPage(l.href)}>{l.label}</a></li>)}
     </ul>
     <ul class="menu-langs">
       {
         ctx.langs.map((l) => (
           <li>
-            <a class="slip" href={ctx.href(ctx.path, l.code)} hreflang={l.code} lang={l.code} aria-current={l.code === ctx.lang ? 'true' : undefined}>
-              {l.name}
-            </a>
+            {l.code === ctx.lang ? (
+              <span class="slip" lang={l.code} aria-current="true">{l.name}</span>
+            ) : (
+              <a class="slip" href={ctx.href(ctx.path, l.code)} hreflang={l.code} lang={l.code}>
+                {l.name}
+              </a>
+            )}
           </li>
         ))
       }
@@ -81,7 +91,8 @@ const current = (href: string) => href === ctx.href(ctx.path);
     padding: 0;
   }
   .links a,
-  .langs a {
+  .langs a,
+  .langs .here {
     display: block;
     padding: 0.6em 0.8em;
     text-decoration: none;
@@ -92,7 +103,7 @@ const current = (href: string) => href === ctx.href(ctx.path);
     color: var(--paper);
   }
   .links a[aria-current],
-  .langs a[aria-current] {
+  .langs [aria-current] {
     text-decoration: underline;
     text-decoration-thickness: 2px;
   }
@@ -146,7 +157,7 @@ const current = (href: string) => href === ctx.href(ctx.path);
     gap: 6px;
     flex-wrap: wrap;
   }
-  .menu-langs a[aria-current] {
+  .menu-langs [aria-current] {
     background: var(--ink);
     color: var(--paper);
   }

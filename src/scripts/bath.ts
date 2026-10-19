@@ -325,15 +325,15 @@ export function mountBath(root: HTMLElement): Live {
     a.click();
     setTimeout(() => URL.revokeObjectURL(url), 4000);
     if (status) status.textContent = root.dataset.lifted ?? '';
+    // the sheet lifts away with the print; the bath stays as the visitor left it
     if (sheet && !reduce) {
       sheet.style.backgroundImage = `url(${url})`;
       sheet.classList.remove('lifting');
       sheet.classList.add('laying');
       await new Promise((r) => setTimeout(r, 380));
       sheet.classList.replace('laying', 'lifting');
-      compose();
       setTimeout(() => sheet.classList.remove('lifting'), 1100);
-    } else compose();
+    }
   }
 
   new IntersectionObserver(([en]) => {
