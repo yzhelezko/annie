@@ -20,7 +20,7 @@ const skills = cv.skills.length ? cv.skills : about.services;
   <div class="page">
     <p class="actions">
       <a class="slip ink" href={pdf.url} download={pdf.name}><Icon name="download" size={16} />{ctx.ui('cv.download')}</a>
-      <button class="slip" type="button" onclick="print()">{ctx.ui('cv.print')}</button>
+      <button class="slip ink" type="button" onclick="print()">{ctx.ui('cv.print')}</button>
     </p>
 
     <article class="sheet">
@@ -144,17 +144,6 @@ const skills = cv.skills.length ? cv.skills : about.services;
     gap: 6px;
     justify-content: center;
     margin-bottom: 20px;
-  }
-  .ink {
-    background: var(--ink);
-    color: var(--paper);
-  }
-  .actions .slip:not(.ink) {
-    background: transparent;
-    border: 1.5px solid var(--ink);
-  }
-  .actions .slip:not(.ink):hover {
-    background: var(--ink);
   }
 
   .sheet {
@@ -284,9 +273,9 @@ const skills = cv.skills.length ? cv.skills : about.services;
   .pills li {
     font-size: 0.8125rem;
     font-weight: 600;
-    padding: 0.3em 0.7em;
-    border: 1.5px solid var(--ink);
-    border-radius: 999px;
+    padding: 0.3em 0.6em;
+    background: var(--ink);
+    color: var(--paper);
   }
   @media (max-width: 720px) {
     .cols {

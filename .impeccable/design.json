@@ -1,0 +1,343 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-19T22:17:29.034981+00:00",
+  "title": "Design System: Anna Prokopets",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "oklch(95.1% 0.007 107)",
+        "tonalRamp": [
+          "#0b0b08",
+          "#242421",
+          "#40403c",
+          "#5e5e5a",
+          "#7d7d79",
+          "#9f9f9a",
+          "#c4c4c0",
+          "#efefea"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "oklch(19.2% 0.004 286)",
+        "tonalRamp": [
+          "#0b0b0d",
+          "#242426",
+          "#3f3f42",
+          "#5d5d60",
+          "#7d7d7f",
+          "#9e9ea1",
+          "#c4c4c7",
+          "#eeeef1"
+        ]
+      },
+      "indigo": {
+        "role": "primary",
+        "displayName": "Indigo",
+        "canonical": "oklch(38.6% 0.169 269)",
+        "tonalRamp": [
+          "#0c0051",
+          "#0e0273",
+          "#202f97",
+          "#3951bb",
+          "#5673e0",
+          "#7596ff",
+          "#98bdff",
+          "#ceebff"
+        ]
+      },
+      "crimson": {
+        "role": "secondary",
+        "displayName": "Crimson",
+        "canonical": "oklch(53.8% 0.189 26)",
+        "tonalRamp": [
+          "#3d0000",
+          "#630000",
+          "#890000",
+          "#b00d18",
+          "#d73f3b",
+          "#fe655c",
+          "#ff8c80",
+          "#ffcfc4"
+        ]
+      },
+      "malachite": {
+        "role": "secondary",
+        "displayName": "Malachite",
+        "canonical": "oklch(54.1% 0.113 163)",
+        "tonalRamp": [
+          "#001600",
+          "#003313",
+          "#00512e",
+          "#00714b",
+          "#29926a",
+          "#51b48a",
+          "#79dbaf",
+          "#a5ffd9"
+        ]
+      },
+      "ochre": {
+        "role": "secondary",
+        "displayName": "Ochre",
+        "canonical": "oklch(58.2% 0.122 70)",
+        "tonalRamp": [
+          "#260000",
+          "#460f00",
+          "#662f00",
+          "#884e00",
+          "#ab6e11",
+          "#ce903f",
+          "#f7b666",
+          "#ffe193"
+        ]
+      },
+      "lampblack": {
+        "role": "secondary",
+        "displayName": "Lampblack",
+        "canonical": "oklch(20.7% 0.010 286)",
+        "tonalRamp": [
+          "#0b0b0f",
+          "#232329",
+          "#3f3f45",
+          "#5d5d63",
+          "#7c7c83",
+          "#9e9ea4",
+          "#c3c3ca",
+          "#eeeef5"
+        ]
+      },
+      "plum": {
+        "role": "secondary",
+        "displayName": "Plum",
+        "canonical": "oklch(38.1% 0.115 316)",
+        "tonalRamp": [
+          "#1c002a",
+          "#380748",
+          "#572868",
+          "#774789",
+          "#9866ab",
+          "#bb87ce",
+          "#e2adf6",
+          "#ffd7ff"
+        ]
+      },
+      "ink-soft": {
+        "role": "neutral",
+        "displayName": "Ink Soft",
+        "canonical": "color-mix(in srgb, var(--ink) 74%, var(--paper))",
+        "tonalRamp": [
+          "#0b0b0d",
+          "#242426",
+          "#3f3f42",
+          "#5d5d60",
+          "#7d7d7f",
+          "#9e9ea1",
+          "#c4c4c7",
+          "#eeeef1"
+        ]
+      },
+      "hair": {
+        "role": "neutral",
+        "displayName": "Hair",
+        "canonical": "color-mix(in srgb, var(--ink) 22%, var(--paper))",
+        "tonalRamp": [
+          "#0b0b08",
+          "#242421",
+          "#40403c",
+          "#5e5e5a",
+          "#7d7d79",
+          "#9f9f9a",
+          "#c4c4c0",
+          "#efefea"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero name and page titles, knocked out in paper on pigment."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section headings."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Project card titles (step-1 at third width)."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "Opening paragraphs and pull quotes in Unbounded 500."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Running text."
+      },
+      "body-large": {
+        "displayName": "Body Large",
+        "purpose": "About and long-form text blocks."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Slips, meta, captions, dates, footer."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "ease-spread",
+        "value": "cubic-bezier(0.12, 0.8, 0.22, 1)",
+        "purpose": "Pigment spreading: reveals, hover washes, menu drop, view transitions, print lift."
+      },
+      {
+        "name": "ease-sink",
+        "value": "cubic-bezier(0.6, 0, 0.9, 0.4)",
+        "purpose": "Paper sheet laid onto the bath before a print is lifted."
+      },
+      {
+        "name": "drop-reveal",
+        "value": "clip-path circle(0% -> 142%) at --ox/--oy, scroll-driven view() entry 5% to cover 38%",
+        "purpose": "Sections spread in from a point on scroll."
+      },
+      {
+        "name": "vt-drop",
+        "value": "760ms, clip-path circle(0 -> 150vmax) at click point",
+        "purpose": "Cross-document navigation lands as a drop from the clicked point."
+      },
+      {
+        "name": "label-wash",
+        "value": "560ms clip-path circle from left edge",
+        "purpose": "Card label hover wash."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "prefers-reduced-motion: reduce",
+        "purpose": "Freezes bath sway, drips, hover stirring, reveals and view transitions."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "single-column",
+        "value": "560px"
+      },
+      {
+        "name": "compact-hero",
+        "value": "640px"
+      },
+      {
+        "name": "stacked-rows",
+        "value": "700px"
+      },
+      {
+        "name": "mobile-nav",
+        "value": "760px"
+      },
+      {
+        "name": "grid-collapse",
+        "value": "900px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Paper Slip",
+      "kind": "button",
+      "refersTo": "slip",
+      "description": "Square paper label for text and controls laid over pigment.",
+      "html": "<div class=\"ds-ground\"><button class=\"ds-slip\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 6h18M5 6v12M9.7 6v9M14.3 6v12M19 6v9\"/></svg>Comb</button> <span class=\"ds-slip\">Emerging AI motion designer</span></div>",
+      "css": ":host{--paper:#efefea;--ink:#141416;--p1:#23349c;--p2:#c42b2b;--ink-2:color-mix(in srgb,#141416 74%,#efefea);--hair:color-mix(in srgb,#141416 22%,#efefea);--font-display:\"Unbounded Variable\",\"Unbounded\",\"Arial Black\",sans-serif;--font-text:\"Commissioner Variable\",\"Commissioner\",system-ui,sans-serif;--ease-spread:cubic-bezier(0.12,0.8,0.22,1)} .ds-ground{background:var(--p1);padding:24px;display:flex;gap:6px} .ds-slip{display:inline-flex;align-items:center;gap:.55em;background:var(--paper);color:var(--ink);font-family:var(--font-text);font-size:.875rem;font-weight:560;line-height:1.2;padding:.6em .8em;border:0;border-radius:0;text-decoration:none;cursor:pointer} .ds-slip:hover{background:var(--ink);color:var(--paper)} .ds-slip:focus-visible{outline:2px solid currentColor;outline-offset:3px}"
+    },
+    {
+      "name": "Ink Slip",
+      "kind": "button",
+      "refersTo": "slip-ink",
+      "description": "Ink-ground slip for actions on paper grounds; hover turns indigo.",
+      "html": "<a class=\"ds-slip ds-ink\" href=\"#\">Download CV</a>",
+      "css": ":host{--paper:#efefea;--ink:#141416;--p1:#23349c;--p2:#c42b2b;--ink-2:color-mix(in srgb,#141416 74%,#efefea);--hair:color-mix(in srgb,#141416 22%,#efefea);--font-display:\"Unbounded Variable\",\"Unbounded\",\"Arial Black\",sans-serif;--font-text:\"Commissioner Variable\",\"Commissioner\",system-ui,sans-serif;--ease-spread:cubic-bezier(0.12,0.8,0.22,1)} .ds-slip{display:inline-flex;align-items:center;gap:.55em;background:var(--paper);color:var(--ink);font-family:var(--font-text);font-size:.875rem;font-weight:560;line-height:1.2;padding:.6em .8em;border:0;border-radius:0;text-decoration:none;cursor:pointer} .ds-slip:hover{background:var(--ink);color:var(--paper)} .ds-slip:focus-visible{outline:2px solid currentColor;outline-offset:3px} .ds-ink{background:var(--ink);color:var(--paper)} .ds-ink:hover{background:var(--p1)}"
+    },
+    {
+      "name": "Navigation",
+      "kind": "nav",
+      "description": "Fixed row of slips: name mark, section links, languages; current item underlined 2px.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-slip ds-mark\" href=\"#\">Anna Prokopets</a><span class=\"ds-slip ds-links\"><a href=\"#\" aria-current=\"page\">Work</a><a href=\"#\">About</a><a href=\"#\">CV</a></span><span class=\"ds-slip ds-links ds-langs\"><a href=\"#\" aria-current=\"true\">RU</a><a href=\"#\">EN</a><a href=\"#\">UA</a></span></nav>",
+      "css": ":host{--paper:#efefea;--ink:#141416;--p1:#23349c;--p2:#c42b2b;--ink-2:color-mix(in srgb,#141416 74%,#efefea);--hair:color-mix(in srgb,#141416 22%,#efefea);--font-display:\"Unbounded Variable\",\"Unbounded\",\"Arial Black\",sans-serif;--font-text:\"Commissioner Variable\",\"Commissioner\",system-ui,sans-serif;--ease-spread:cubic-bezier(0.12,0.8,0.22,1)} .ds-slip{display:inline-flex;align-items:center;gap:.55em;background:var(--paper);color:var(--ink);font-family:var(--font-text);font-size:.875rem;font-weight:560;line-height:1.2;padding:.6em .8em;border:0;border-radius:0;text-decoration:none;cursor:pointer} .ds-slip:hover{background:var(--ink);color:var(--paper)} .ds-slip:focus-visible{outline:2px solid currentColor;outline-offset:3px} .ds-nav{display:flex;gap:6px;background:var(--p1);padding:12px} .ds-mark{font-family:var(--font-display);font-weight:700;letter-spacing:-.02em} .ds-links{padding:0;gap:0} .ds-links a{display:block;padding:.6em .8em;color:inherit;text-decoration:none} .ds-links a:hover{background:var(--ink);color:var(--paper)} .ds-links a[aria-current]{text-decoration:underline;text-decoration-thickness:2px} .ds-langs{margin-left:auto}"
+    },
+    {
+      "name": "Project Card",
+      "kind": "card",
+      "refersTo": "pigment-field",
+      "description": "Pigment frame plus paper label; on hover the pigment spreads into the label from its left edge.",
+      "html": "<a class=\"ds-card\" href=\"#\"><div class=\"ds-frame\"></div><div class=\"ds-label\"><h3>Night Garden</h3><p class=\"ds-meta\">2026 · AI video</p></div></a>",
+      "css": ":host{--paper:#efefea;--ink:#141416;--p1:#23349c;--p2:#c42b2b;--ink-2:color-mix(in srgb,#141416 74%,#efefea);--hair:color-mix(in srgb,#141416 22%,#efefea);--font-display:\"Unbounded Variable\",\"Unbounded\",\"Arial Black\",sans-serif;--font-text:\"Commissioner Variable\",\"Commissioner\",system-ui,sans-serif;--ease-spread:cubic-bezier(0.12,0.8,0.22,1)} .ds-card{display:flex;flex-direction:column;width:320px;color:var(--ink);text-decoration:none;font-family:var(--font-text);background:var(--paper)} .ds-frame{aspect-ratio:4/3;background:#10835c} .ds-label{position:relative;isolation:isolate;padding:14px 12px 14px 0;transition:color 200ms} .ds-label::before{content:\"\";position:absolute;inset:0;z-index:-1;background:#10835c;clip-path:circle(0 at 0 50%);transition:clip-path 560ms var(--ease-spread)} .ds-label h3{margin:0;font-family:var(--font-display);font-weight:760;font-size:1.5rem;letter-spacing:-.04em;line-height:1} .ds-label h3,.ds-meta{transition:translate 500ms var(--ease-spread)} .ds-meta{margin:6px 0 0;font-size:.875rem;font-weight:560} .ds-card:hover .ds-label,.ds-card:focus-visible .ds-label{color:var(--paper)} .ds-card:hover .ds-label::before,.ds-card:focus-visible .ds-label::before{clip-path:circle(150% at 0 50%)} .ds-card:hover :is(h3,.ds-meta){translate:14px 0} .ds-card:focus-visible{outline:2px solid var(--ink);outline-offset:4px}"
+    },
+    {
+      "name": "Knockout Title on Pigment",
+      "kind": "custom",
+      "description": "Display name knocked out in paper over a single pigment, role on a paper slip beneath.",
+      "html": "<div class=\"ds-hero\"><h1>Anna Prokopets</h1><span class=\"ds-slip\">Emerging AI motion designer</span></div>",
+      "css": ":host{--paper:#efefea;--ink:#141416;--p1:#23349c;--p2:#c42b2b;--ink-2:color-mix(in srgb,#141416 74%,#efefea);--hair:color-mix(in srgb,#141416 22%,#efefea);--font-display:\"Unbounded Variable\",\"Unbounded\",\"Arial Black\",sans-serif;--font-text:\"Commissioner Variable\",\"Commissioner\",system-ui,sans-serif;--ease-spread:cubic-bezier(0.12,0.8,0.22,1)} .ds-slip{display:inline-flex;align-items:center;gap:.55em;background:var(--paper);color:var(--ink);font-family:var(--font-text);font-size:.875rem;font-weight:560;line-height:1.2;padding:.6em .8em;border:0;border-radius:0;text-decoration:none;cursor:pointer} .ds-slip:hover{background:var(--ink);color:var(--paper)} .ds-slip:focus-visible{outline:2px solid currentColor;outline-offset:3px} .ds-hero{background:var(--p1);color:var(--paper);padding:48px 24px 24px} .ds-hero h1{margin:0 0 16px;font-family:var(--font-display);font-weight:800;font-size:4rem;line-height:.92;letter-spacing:-.045em;max-width:12ch}"
+    },
+    {
+      "name": "Ruled List",
+      "kind": "custom",
+      "description": "CV and credits rows on 1.5px ink rules; dates in Ink Soft label weight, titles in Unbounded 650.",
+      "html": "<ul class=\"ds-rows\"><li><span class=\"ds-when\">2025–2026</span><span class=\"ds-what\">AI motion design</span><span class=\"ds-where\">Freelance</span></li><li><span class=\"ds-when\">2024</span><span class=\"ds-what\">Motion course</span><span class=\"ds-where\">Online</span></li></ul>",
+      "css": ":host{--paper:#efefea;--ink:#141416;--p1:#23349c;--p2:#c42b2b;--ink-2:color-mix(in srgb,#141416 74%,#efefea);--hair:color-mix(in srgb,#141416 22%,#efefea);--font-display:\"Unbounded Variable\",\"Unbounded\",\"Arial Black\",sans-serif;--font-text:\"Commissioner Variable\",\"Commissioner\",system-ui,sans-serif;--ease-spread:cubic-bezier(0.12,0.8,0.22,1)} .ds-rows{list-style:none;margin:0;padding:0;font-family:var(--font-text);color:var(--ink);background:var(--paper)} .ds-rows li{display:grid;grid-template-columns:9ch 5fr 4fr;gap:6px 20px;align-items:baseline;padding-block:18px;border-top:1.5px solid var(--ink)} .ds-rows li:last-child{border-bottom:1.5px solid var(--ink)} .ds-when{font-weight:560;color:var(--ink-2)} .ds-what{font-family:var(--font-display);font-size:1.25rem;font-weight:650;letter-spacing:-.025em} .ds-where{color:var(--ink-2)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Ebru Bath",
+    "overview": "The site is a marbling bath. Pigment floats flat on water, the visitor's pointer is the stylus, and every surface is either the bath (live pigment), a print lifted from it (pigment on paper), or the paper itself. Text never sits on a tinted panel or a glassy overlay; large type is knocked out of pigment in paper colour, small text rides on a paper slip laid over the colour.\n\nDensity is gallery-like: a full-bleed bath first, then work on bare paper in a 12-column grid, one indigo drop for About, ruled lists for the CV, and a closing print on a fresh sheet. Motion is the material's own: drops spread from a point, combs drag, the water sways. Nothing lifts, glows, or fades.",
+    "keyCharacteristics": [
+      "Flat pigments on neutral paper; inks displace, never mix.",
+      "Unbounded heavy knockout display, Commissioner for reading and labels.",
+      "Small text on square paper or ink slips, never directly on pigment.",
+      "Pigment boundaries are real ink contours from the marbling engine, never straight dividers or CSS curves.",
+      "Reveals, hovers, menu and page transitions are circular drops spreading from a point."
+    ],
+    "rules": [
+      {
+        "name": "The Displacement Rule",
+        "body": "Pigments meet edge to edge; they never blend. No gradients, no alpha overlays, no translucent scrims. Derived neutrals are computed once to a solid colour, never layered with opacity.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Pigment Per Field Rule",
+        "body": "Any pigment ground (card frame, label wash, project header, About field) carries a single pigment. Multiple pigments appear together only inside a marbled bath, print or band produced by the engine.",
+        "section": "colors"
+      },
+      {
+        "name": "The Knockout Rule",
+        "body": "Display type on pigment is always paper-coloured and set tight (negative tracking -0.035 to -0.045em). Display type never sits on pigment in ink or in another pigment.",
+        "section": "typography"
+      },
+      {
+        "name": "The Slip Rule",
+        "body": "Text smaller than the lead never sits directly on a bath, print or pigment field; it goes on a slip.",
+        "section": "typography"
+      },
+      {
+        "name": "The No-Lift Rule",
+        "body": "Nothing hovers above the page. State changes are colour swaps (paper to ink) or pigment spreading into a shape, never shadow, scale or blur.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** put every small label, role, meta and control on a slip: paper slip over pigment, ink slip over paper.",
+      "**Do** knock display type out of pigment in paper colour with tight negative tracking.",
+      "**Do** give each pigment ground a single pigment from the theme; let multi-pigment surfaces come only from the marbling engine (bath, print, band, edge).",
+      "**Do** animate reveals, hovers and transitions as a circular clip spreading from a point, with the spread easing (`cubic-bezier(0.12, 0.8, 0.22, 1)`), and freeze ambient motion under reduced motion.",
+      "**Do** keep corners square and separators as solid 1.5px ink or 1px hair rules."
+    ],
+    "donts": [
+      "**Don't** use gradients, box or text shadows, blur, or opacity overlays; inks displace, they never mix.",
+      "**Don't** place small text directly on a bath, print or pigment field.",
+      "**Don't** draw pigment boundaries as straight lines or CSS curves (waves, blobs); use an engine-generated ink contour or a hard rectangular field edge.",
+      "**Don't** round slips, cards or frames, and don't add lifted hover states.",
+      "**Don't** fall back to a dark thumbnail grid with a big name; work sits on paper, each piece in its own pigment."
+    ]
+  }
+}

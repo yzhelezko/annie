@@ -18,7 +18,6 @@
   --gap: clamp(14px, 1.8vw, 28px);
   --max: 1680px;
   --space-1: clamp(56px, 7vw, 120px);
-  --space-2: clamp(88px, 12vw, 200px);
 
   --ease-spread: cubic-bezier(0.12, 0.8, 0.22, 1);
   --ease-sink: cubic-bezier(0.6, 0, 0.9, 0.4);
