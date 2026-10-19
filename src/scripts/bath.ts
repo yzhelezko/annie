@@ -38,7 +38,7 @@ export function mountBath(root: HTMLElement): Live {
   let lastDrip = 0;
   let sway = 0;
   let next = 1;
-  let stale = false;
+  let fine = 3;
   let view = { s: 1, ox: 0, oy: 0, dpr: 1 };
   // the water is always moving unless the visitor asked for stillness
   const alive = () => !reduce && visible && !document.hidden;
@@ -60,7 +60,8 @@ export function mountBath(root: HTMLElement): Live {
     const rand = rng(seed);
     const pattern = choice === 'random' ? PATTERNS[Math.floor(rand() * PATTERNS.length)] : choice;
     const order = colors.slice(1).concat(colors[0]);
-    bath = new Bath(Math.max(1, r.width), Math.max(1, r.height), colors[0], r.width < 700 ? 2.6 : 3);
+    fine = r.width < 700 ? 2.6 : 3;
+    bath = new Bath(Math.max(1, r.width), Math.max(1, r.height), colors[0], fine);
     ops = recipe(bath.w, bath.h, order, rand, pattern);
     progress.clear();
     growth.clear();
@@ -106,17 +107,13 @@ export function mountBath(root: HTMLElement): Live {
     }
 
     if (pour) flow(dt);
-    if (stale) {
-      bath.refine();
-      stale = false;
-    }
 
     if (alive()) {
       // gentle back-and-forth swell: a shear that returns to where it started every period
       const u = unit();
       const target = Math.sin((clock / SWAY_PERIOD) * Math.PI * 2) * u * 0.014;
       if (!coarse || frames % 2 === 0) {
-        bath.comb(Math.PI / 2, u * 0.11, u * 0.031, target - sway, u * 0.03, true, frames % 12 === 0);
+        bath.comb(Math.PI / 2, u * 0.14, u * 0.031, target - sway, u * 0.07, true, frames % 12 === 0);
         sway = target;
         dirty = true;
       }
@@ -127,7 +124,12 @@ export function mountBath(root: HTMLElement): Live {
       if (frames % 90 === 0) bath.prune(Math.max(bath.w, bath.h) * 0.6);
     }
 
-    if (bath.vertexCount() > VERTEX_BUDGET) bath.seg *= 1.2;
+    // detail follows the vertex budget both ways, so a busy moment never coarsens the bath for good
+    if (frames % 30 === 0) {
+      const n = bath.vertexCount();
+      if (n > VERTEX_BUDGET && bath.seg < fine * 2) bath.seg *= 1.15;
+      else if (n < VERTEX_BUDGET * 0.5 && bath.seg > fine) bath.seg = Math.max(fine, bath.seg / 1.15);
+    }
     if (dirty) draw();
     if (alive() || ops.length || pour) play();
   }
@@ -264,17 +266,20 @@ export function mountBath(root: HTMLElement): Live {
   canvas.addEventListener('pointercancel', release);
   canvas.addEventListener('pointerleave', () => (hover = null));
 
-  // Scrolling drags a comb through the bath; scrolling back undoes it exactly.
-  let scrolled = scrollY;
+  // Scrolling within the hero sways the paint in broad waves. Displacement depends only on how far the hero
+  // is scrolled (clamped) and the field is smooth, so scrolling back returns the paint where it was.
+  const scrollPos = () => Math.min(Math.max(scrollY, 0), root.offsetHeight);
+  let scrolled = scrollPos();
   addEventListener(
     'scroll',
     () => {
-      const d = scrollY - scrolled;
-      scrolled = scrollY;
-      if (!d || reduce || !visible || !bath) return;
+      const pos = scrollPos();
+      const d = pos - scrolled;
+      scrolled = pos;
+      if (!d || reduce || !bath) return;
       const u = unit();
-      bath.comb(Math.PI / 2, u * 0.085, 0, d * 0.3, u * 0.012, true, false);
-      stale = dirty = true;
+      bath.comb(Math.PI / 2, u * 0.18, u * 0.04, d * 0.08, u * 0.07, true);
+      dirty = true;
       play();
     },
     { passive: true },
