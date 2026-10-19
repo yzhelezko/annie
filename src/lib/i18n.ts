@@ -48,3 +48,8 @@ export function makeCtx(lang: string, path: string, langs: Lang[], ui: Record<st
 
 /** URL path segments for a language: the first language lives at the root. */
 export const prefix = (lang: string, def: string) => (lang === def ? '' : lang + '/');
+
+/** "+380687704060" → "+380 68 770 40 60"; other formats pass through. */
+export const phoneLabel = (p: string) =>
+  p.replace(/\s+/g, '').replace(/^\+380(\d{2})(\d{3})(\d{2})(\d{2})$/, '+380 $1 $2 $3 $4');
+export const phoneHref = (p: string) => 'tel:' + p.replace(/[^\d+]/g, '');

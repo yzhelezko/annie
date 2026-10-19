@@ -1,0 +1,42 @@
+---
+// The organic boundary where a pigment field meets the paper: a real ink contour from the
+// marbling engine (a vast drop, nudged by paper drops, combed back and forth), rendered at build time.
+import { Bath, rng, hash, toSvgPaths } from '../engine/marbling';
+
+interface Props {
+  seed: string;
+  color: string;
+  paper: string;
+  flip?: boolean;
+}
+const { seed, color, paper, flip = false } = Astro.props;
+const W = 1000;
+const H = 160;
+const rand = rng(hash(seed));
+const bath = new Bath(W, H, 'none', 2);
+const R = 40000;
+bath.drop(W / 2, H * 0.62 + R, R, color);
+for (let i = 0; i < 9; i++) bath.spread(rand() * W, H * (0.45 + rand() * 0.3), 14 + rand() * 30);
+for (let i = 0; i < 5; i++) bath.drop(rand() * W, H * (0.5 + rand() * 0.25), 6 + rand() * 16, paper);
+bath.comb(Math.PI / 2, 62 + rand() * 30, rand() * 100, 22 + rand() * 14, 6, true);
+const paths = toSvgPaths(bath, 0.8, 1);
+---
+<svg
+  class:list={['edge', { flip }]}
+  viewBox={`0 0 ${W} ${H}`}
+  preserveAspectRatio="none"
+  aria-hidden="true"
+  focusable="false">{paths.map((p) => <path d={p.d} fill={p.color} />)}</svg>
+
+<style>
+  .edge {
+    display: block;
+    width: 100%;
+    height: clamp(56px, 9vw, 150px);
+    margin-bottom: -1px;
+  }
+  .flip {
+    rotate: 180deg;
+    margin: -1px 0 0;
+  }
+</style>

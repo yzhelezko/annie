@@ -5,56 +5,51 @@
 # ─────────────────────────────────────────────────────────────
 
 name:
-  en: Annie Demo
-  ru: Энни Демо
-  uk: Енні Демо
+  ru: Анна Прокопец
+  en: Anna Prokopets
+  uk: Анна Прокопець
 
 role:
-  en: Graphic & motion design
-  ru: Графический и моушн-дизайн
-  uk: Графічний і моушн-дизайн
+  ru: Начинающий AI моушн-дизайнер
+  en: Emerging AI motion designer
+  uk: Початківець в AI моушн-дизайні
 
-location:
-  en: Kyiv — remote worldwide
-  ru: Киев — удалённо по всему миру
-  uk: Київ — віддалено по всьому світу
+# Город / часовой пояс. Раскомментируйте, чтобы показать.
+# location: { ru: "Киев", en: "Kyiv", uk: "Київ" }
 
-# Короткая строка о доступности. Удалите строку, чтобы скрыть.
-availability:
-  en: Booking projects from January 2027
-  ru: Беру проекты с января 2027
-  uk: Беру проєкти з січня 2027
+# Короткая строка о доступности. Раскомментируйте, чтобы показать.
+# availability: { ru: "Открыта к проектам", en: "Open to projects", uk: "Відкрита до проєктів" }
 
-email: hello@example.com
+email: annieprokopets@gmail.com
+phone: "+380687704060"
 
-socials:
-  - label: Behance
-    url: https://www.behance.net/
-  - label: Instagram
-    url: https://www.instagram.com/
-  - label: Vimeo
-    url: https://vimeo.com/
-  - label: Telegram
-    url: https://t.me/
+# Соцсети: label + url. Пусто — блок скрыт.
+socials: []
+#  - label: Instagram
+#    url: https://www.instagram.com/…
+#  - label: Behance
+#    url: https://www.behance.net/…
+#  - label: Telegram
+#    url: https://t.me/…
 
 # Языки сайта. Первый — язык по умолчанию (открывается по адресу «/»).
 # Чтобы добавить язык: допишите его сюда и добавьте переводы в ui.yaml.
 languages:
-  - code: en
-    label: EN
-    name: English
   - code: ru
     label: RU
     name: Русский
+  - code: en
+    label: EN
+    name: English
   - code: uk
     label: UA
     name: Українська
 
 seo:
   description:
-    en: "Portfolio and CV — graphic and motion design: identity, posters, animated logos and titles."
-    ru: "Портфолио и CV — графический и моушн-дизайн: айдентика, плакаты, анимированные логотипы и титры."
-    uk: "Портфоліо та CV — графічний і моушн-дизайн: айдентика, плакати, анімовані логотипи й титри."
+    ru: "Портфолио и резюме: AI моушн-дизайн — видео, анимация, визуальные эксперименты."
+    en: "Portfolio and CV: AI motion design — video, animation and visual experiments."
+    uk: "Портфоліо та резюме: AI моушн-дизайн — відео, анімація, візуальні експерименти."
   # Картинка для превью ссылок (1200×630), лежит в content/media/
   image: og.jpg
 

@@ -11,16 +11,18 @@ interface Props {
   /** "16/9"; when set the media fills a fixed frame (object-fit: cover). */
   ratio?: string;
   sizes: string;
+  /** object-position for cropped media, e.g. "left center" */
+  position?: string;
   controls?: boolean;
   eager?: boolean;
 }
-const { ctx, res, alt, ratio, sizes, controls = false, eager = false } = Astro.props;
+const { ctx, res, alt, ratio, sizes, position, controls = false, eager = false } = Astro.props;
 const ALL = [480, 720, 960, 1280, 1600, 1920, 2560];
 const widths = (w: number) => {
   const list = ALL.filter((x) => x < w);
   return list.length && list[list.length - 1] >= w * 0.9 ? list : [...list, w];
 };
-const style = ratio ? `aspect-ratio:${ratio}` : undefined;
+const style = [ratio && `aspect-ratio:${ratio}`, position && `object-position:${position}`].filter(Boolean).join(';') || undefined;
 const poster = res.kind === 'video' && res.poster ? (await getImage({ src: res.poster, width: Math.min(1920, res.poster.width), format: 'webp' })).src : undefined;
 const ytThumb = res.kind === 'youtube' ? `https://i.ytimg.com/vi/${res.id}/maxresdefault.jpg` : undefined;
 ---
@@ -43,7 +45,7 @@ const ytThumb = res.kind === 'youtube' ? `https://i.ytimg.com/vi/${res.id}/maxre
 {res.kind === 'remote' && <img class:list={['m', { fill: !!ratio }]} style={style} src={res.url} alt={alt} loading={eager ? 'eager' : 'lazy'} decoding="async" />}
 {
   res.kind === 'video' && (
-    <div class:list={['m vid', { fill: !!ratio }]} style={style} data-video={controls ? 'controls' : 'loop'}>
+    <div class:list={['m vid', { fill: !!ratio }]} style={ratio ? `aspect-ratio:${ratio}` : undefined} data-video={controls ? 'controls' : 'loop'}>
       <video
         playsinline
         muted={!controls}
@@ -52,6 +54,7 @@ const ytThumb = res.kind === 'youtube' ? `https://i.ytimg.com/vi/${res.id}/maxre
         preload={controls ? 'metadata' : 'none'}
         poster={poster}
         aria-label={alt || undefined}
+        style={position ? `object-position:${position}` : undefined}
       >
         <source src={res.url} type={res.type} />
       </video>
@@ -82,6 +85,9 @@ const ytThumb = res.kind === 'youtube' ? `https://i.ytimg.com/vi/${res.id}/maxre
     width: 100%;
     height: auto;
     background: var(--hair);
+    /* a print's edge: paper-ground work must not dissolve into the paper page */
+    outline: 1px solid var(--hair);
+    outline-offset: -1px;
   }
   .m.fill {
     object-fit: cover;

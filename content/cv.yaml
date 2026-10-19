@@ -8,43 +8,31 @@ summary:
   uk: "Заглушка — один-два рядки про практику, досвід і фокус."
 
 experience:
-  - role: { en: Senior designer, ru: Старший дизайнер, uk: Старший дизайнер }
+  - role: { en: AI motion designer, ru: AI моушн-дизайнер, uk: AI моушн-дизайнер }
     company: Example Studio
-    place: { en: Kyiv, ru: Киев, uk: Київ }
-    start: 2023
+    place: { en: Remote, ru: Удалённо, uk: Віддалено }
+    start: 2025
     end:
     text:
-      en: "Placeholder: identity and motion systems for cultural and tech clients."
-      ru: "Заглушка: айдентика и моушн-системы для культурных и технологических клиентов."
-      uk: "Заглушка: айдентика та моушн-системи для культурних і технологічних клієнтів."
-  - role: { en: Motion designer, ru: Моушн-дизайнер, uk: Моушн-дизайнер }
-    company: Example Agency
-    place: { en: Remote, ru: Удалённо, uk: Віддалено }
-    start: 2020
-    end: 2023
-    text:
-      en: "Placeholder: animated logos, title sequences and social campaigns."
-      ru: "Заглушка: анимированные логотипы, титры и кампании для соцсетей."
-      uk: "Заглушка: анімовані логотипи, титри та кампанії для соцмереж."
+      en: "Placeholder: describe your first projects, courses or commissions."
+      ru: "Заглушка: опишите первые проекты, курсы или заказы."
+      uk: "Заглушка: опишіть перші проєкти, курси чи замовлення."
 
 education:
-  - title: { en: BA Graphic Design, ru: "Бакалавр, графический дизайн", uk: "Бакалавр, графічний дизайн" }
-    place: Example Academy of Arts
-    start: 2016
-    end: 2020
+  - title: { en: Course title (placeholder), ru: Название курса (заглушка), uk: Назва курсу (заглушка) }
+    place: Example School
+    start: 2025
+    end: 2025
 
 skills:
-  - { en: Identity systems, ru: Системы айдентики, uk: Системи айдентики }
-  - { en: Animation & timing, ru: Анимация и тайминг, uk: Анімація і таймінг }
-  - { en: Typography, ru: Типографика, uk: Типографіка }
-  - { en: Art direction, ru: Арт-дирекшн, uk: Арт-дирекшн }
+  - { en: AI video generation, ru: Генерация AI-видео, uk: Генерація AI-відео }
+  - { en: Motion design, ru: Моушн-дизайн, uk: Моушн-дизайн }
 
-tools: [After Effects, Cinema 4D, Figma, Illustrator, Photoshop, Blender]
+# Программы и сервисы, например: [After Effects, Runway, Midjourney]. Пусто — блок скрыт.
+tools: []
 
 # Реальные награды и публикации. Пусто — блок скрыт.
 awards: []
 
-languages:
-  - { en: "Ukrainian — native", ru: "Украинский — родной", uk: "Українська — рідна" }
-  - { en: "English — fluent", ru: "Английский — свободно", uk: "Англійська — вільно" }
-  - { en: "Russian — fluent", ru: "Русский — свободно", uk: "Російська — вільно" }
+# Языки, например: - { ru: "Украинский — родной", en: "Ukrainian — native", uk: "Українська — рідна" }
+languages: []

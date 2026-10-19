@@ -23,20 +23,23 @@ const SIZES = {
   third: '(min-width: 900px) 33vw, (min-width: 560px) 50vw, 100vw',
 } as const;
 const res = resolve(d.cover, dir, `${project.filePath} → cover`, d.poster);
+const natural = res.kind === 'image' ? `${res.img.width}/${res.img.height}` : res.kind === 'video' && res.poster ? `${res.poster.width}/${res.poster.height}` : '16/9';
+const ratio = d.coverRatio === 'auto' ? natural : (d.coverRatio ?? RATIO[d.size]);
 const title = ctx.t(d.title);
 const h = hash(project.id);
 const origin = `--ox:${18 + (h % 64)}%;--oy:${22 + ((h >> 8) % 56)}%`;
 const meta = [d.client && ctx.t(d.client), ...d.tags.slice(0, 2).map(ctx.t)].filter(Boolean);
 ---
 <li class={`card size-${d.size}`} style={`--c:${d.color ?? color};${origin}`}>
-  <div class="frame reveal" style={`aspect-ratio:${d.coverRatio ?? RATIO[d.size]}`}>
-    <Media ctx={ctx} res={res} alt={title} ratio={d.coverRatio ?? RATIO[d.size]} sizes={SIZES[d.size]} eager={eager} />
+  <div class="frame reveal" style={`aspect-ratio:${ratio}`}>
+    <Media ctx={ctx} res={res} alt={title} ratio={ratio} position={d.coverPosition} sizes={SIZES[d.size]} eager={eager} />
     <a class="hit" href={ctx.href(`work/${project.id}/`)} tabindex="-1" aria-hidden="true"></a>
-    {d.demo && <span class="slip demo">{ctx.ui('work.demo')}</span>}
   </div>
   <div class="label">
     <h3><a href={ctx.href(`work/${project.id}/`)}>{title}</a></h3>
-    <p class="meta"><span class="tnum">{d.year}</span>{meta.map((m) => <span>{m}</span>)}</p>
+    <p class="meta">
+      <span class="tnum">{d.year}</span>{meta.map((m) => <span>{m}</span>)}{d.demo && <span class="slip ink demo">{ctx.ui('work.demo')}</span>}
+    </p>
     <Icon name="arrow" size={22} />
   </div>
 </li>
@@ -53,11 +56,8 @@ const meta = [d.client && ctx.t(d.client), ...d.tags.slice(0, 2).map(ctx.t)].fil
     background: var(--c);
   }
   .demo {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    z-index: 2;
-    pointer-events: none;
+    padding: 0.2em 0.5em;
+    font-size: 0.75rem;
   }
   .label {
     position: relative;
@@ -122,6 +122,7 @@ const meta = [d.client && ctx.t(d.client), ...d.tags.slice(0, 2).map(ctx.t)].fil
     grid-column: 1;
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 2px 14px;
     font-size: var(--step--1);
     font-weight: 560;

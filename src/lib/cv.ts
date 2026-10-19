@@ -22,7 +22,8 @@ export const slug = (s: string) =>
 /** A PDF the maintainer supplied, or the one the build prints from the CV page. */
 export function cvPdfUrl(cv: Cv, ctx: Ctx, site?: Site) {
   const own = typeof cv.pdf === 'string' ? cv.pdf : cv.pdf?.[ctx.lang] ?? cv.pdf?.[ctx.def];
-  const name = `${slug(site ? ctx.t(site.name) : 'cv')}-cv-${ctx.lang}.pdf`;
+  const latin = site ? (typeof site.name === 'string' ? site.name : (site.name.en ?? ctx.t(site.name))) : 'cv';
+  const name = `${slug(latin)}-cv-${ctx.lang}.pdf`;
   if (own) return { url: file(own, 'content/media', 'cv.yaml → pdf'), name, generated: false };
   return { url: ctx.asset(`cv-${ctx.lang}.pdf`), name, generated: true };
 }

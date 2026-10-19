@@ -15,6 +15,7 @@ summary:
   ru: "Демо-проект. Вёрстка небольшого журнала о путешествиях."
   uk: "Демо-проєкт. Верстка невеликого журналу про подорожі."
 cover: spread-1.jpg
+coverRatio: auto
 size: half
 color: "#c42b2b"
 order: 5

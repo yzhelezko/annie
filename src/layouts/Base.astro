@@ -67,6 +67,14 @@ const vars = [`--paper:${t.paper}`, `--ink:${t.ink}`, ...t.pigments.map((c, i) =
     <slot name="head" />
   </head>
   <body>
+    <Fragment set:html={`<!--
+THESIS: The portfolio is an ebru bath. The visitor's pointer is the stylus and combs live pigment. It refuses the dark thumbnail grid with a big name.
+OWN-WORLD: Flat pigments (indigo, crimson, malachite, ochre, lampblack, plum) on neutral paper. Unbounded knockout display, Commissioner text. Small text rides on paper slips. No gradients, no shadows, no opacity blends: inks displace and never mix.
+STORY: Meet a live bath with the name knocked out of it, comb it, see the work on paper, read the about text on one spread drop of indigo, check the CV, then close on the print lifted from your own bath with the email.
+FIRST VIEWPORT: Full-bleed canvas bath. Name at step-4, bottom left, paper knockout. Role, location and availability slips beneath it. Tools bottom right: next colour, comb, new bath, lift a print. Nav slips on top.
+FORM: medium-native-ebru-floated-pigment, adopted from the bolder hand; seed 655f1d09.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+-->`} />
     <a class="skip slip" href="#main">{ctx.ui('nav.skip')}</a>
     <Nav ctx={ctx} />
     <main id="main">

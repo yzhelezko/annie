@@ -23,6 +23,7 @@ const site = defineCollection({
     location: loc.optional(),
     availability: loc.optional(),
     email: z.email(),
+    phone: z.string().optional(),
     socials: z.array(z.object({ label: z.string(), url: z.url() })).default([]),
     languages: z.array(z.object({ code: z.string(), label: z.string(), name: z.string() })).min(1),
     seo: z.object({ description: loc, image: z.string().optional() }),
@@ -72,6 +73,7 @@ const cv = defineCollection({
 
 const media = z.object({
   src: z.string(),
+  position: z.string().optional(),
   alt: loc.optional(),
   caption: loc.optional(),
   poster: z.string().optional(),
@@ -106,7 +108,8 @@ const projects = defineCollection({
     palette: z.array(hex).min(2).optional(),
     cover: z.string(),
     poster: z.string().optional(),
-    coverRatio: z.string().optional(),
+    coverRatio: z.string().regex(/^(auto|\d+(\.\d+)?\/\d+(\.\d+)?)$/, 'coverRatio: "16/10" или "auto" (как у файла)').optional(),
+    coverPosition: z.string().optional(),
     size: z.enum(['full', 'wide', 'half', 'third']).default('half'),
     order: z.number().optional(),
     home: z.boolean().default(true),

@@ -21,6 +21,7 @@ summary:
 
 # Обложка на главной: картинка или видео (видео крутится без звука)
 cover: cover.jpg
+coverRatio: auto
 # Размер карточки на главной: full · wide · half · third
 size: full
 # Цвет проекта (заливка при наведении и «оттиск» в шапке)
@@ -48,4 +49,4 @@ blocks:
 
 credits:
   - role: { en: Design & animation, ru: Дизайн и анимация, uk: Дизайн і анімація }
-    name: Annie Demo
+    name: Anna Prokopets

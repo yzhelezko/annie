@@ -159,6 +159,17 @@ button.slip {
   cursor: pointer;
 }
 
+/* on paper grounds a slip turns to ink so it stays a distinct label */
+.slip.ink {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+a.slip.ink:hover,
+button.slip.ink:hover {
+  background: var(--p1);
+}
+
 .tnum {
   font-variant-numeric: tabular-nums lining-nums;
 }

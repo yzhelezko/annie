@@ -55,7 +55,7 @@ const facts = [
         {d.summary && <p>{ctx.t(d.summary)}</p>}
         {d.tags.length > 0 && (
           <ul class="tags">
-            {d.tags.map((t) => <li>{ctx.t(t)}</li>)}
+            {d.tags.map((t) => <li class="slip ink">{ctx.t(t)}</li>)}
           </ul>
         )}
       </section>
@@ -83,7 +83,7 @@ const facts = [
         {d.links.length > 0 && (
           <p class="links">
             {d.links.map((l) => (
-              <a class="slip" href={l.url} rel="noopener" target="_blank">
+              <a class="slip ink" href={l.url} rel="noopener" target="_blank">
                 {ctx.t(l.label)}
                 <Icon name="external" size={14} />
               </a>
@@ -97,7 +97,7 @@ const facts = [
   {
     next !== project && (
       <a class="next" href={ctx.href(`work/${next.id}/`)} style={`--c:${nextColor}`}>
-        <span class="k">{ctx.ui('work.next')}</span>
+        <span class="visually-hidden">{ctx.ui('work.next')}: </span>
         <span class="t">{ctx.t(next.data.title)}</span>
         <Icon name="arrow" size={40} />
       </a>
@@ -172,13 +172,6 @@ const facts = [
     align-content: start;
     gap: 6px;
   }
-  .tags li {
-    font-size: var(--step--1);
-    font-weight: 600;
-    padding: 0.4em 0.8em;
-    border: 1.5px solid var(--ink);
-    border-radius: 999px;
-  }
   @media (max-width: 900px) {
     .lead p,
     .tags {
@@ -209,10 +202,6 @@ const facts = [
     gap: 6px;
     margin-top: 24px;
   }
-  .links .slip {
-    background: var(--ink);
-    color: var(--paper);
-  }
 
   .next {
     position: relative;
@@ -242,11 +231,6 @@ const facts = [
   .next:hover::before,
   .next:focus-visible::before {
     clip-path: circle(150% at 0 100%);
-  }
-  .next .k {
-    grid-column: 1 / -1;
-    font-size: var(--step--1);
-    font-weight: 600;
   }
   .next .t {
     font-family: var(--font-display);

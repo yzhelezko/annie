@@ -11,8 +11,8 @@ nav:
   skip: { en: Skip to content, ru: Перейти к содержимому, uk: Перейти до змісту }
 
 bath:
-  hint: { en: "Drag to comb the paint · click to drop a colour", ru: "Ведите, чтобы прочесать краску · нажмите, чтобы капнуть цвет", uk: "Ведіть, щоб розчесати фарбу · натисніть, щоб капнути колір" }
-  hintTouch: { en: "Swipe sideways to comb · tap to drop a colour", ru: "Ведите вбок, чтобы прочесать · коснитесь, чтобы капнуть", uk: "Ведіть убік, щоб розчесати · торкніться, щоб капнути" }
+  hint: { en: "Move to stir the water · hold to pour paint · drag to comb", ru: "Ведите курсор — вода оживает · удерживайте — льётся краска · тяните — прочёсываете", uk: "Ведіть курсор — вода оживає · утримуйте — ллється фарба · тягніть — розчісуєте" }
+  hintTouch: { en: "Hold to pour paint · swipe sideways to comb", ru: "Удерживайте — льётся краска · ведите вбок — прочёсываете", uk: "Утримуйте — ллється фарба · ведіть убік — розчісуєте" }
   next: { en: Next colour, ru: Следующий цвет, uk: Наступний колір }
   comb: { en: Comb, ru: Прочесать, uk: Розчесати }
   fresh: { en: New bath, ru: Новая ванна, uk: Нова ванна }

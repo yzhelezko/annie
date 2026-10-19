@@ -4,7 +4,7 @@ import Band from '../components/Band.astro';
 import Icon from '../components/Icon.astro';
 import { load } from '../lib/data';
 import { cvPdfUrl, span } from '../lib/cv';
-import type { Ctx } from '../lib/i18n';
+import { phoneHref, phoneLabel, type Ctx } from '../lib/i18n';
 
 interface Props {
   ctx: Ctx;
@@ -34,6 +34,7 @@ const skills = cv.skills.length ? cv.skills : about.services;
 
       <ul class="contacts">
         <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+        {site.phone && <li class="tnum"><a href={phoneHref(site.phone)}>{phoneLabel(site.phone)}</a></li>}
         {site.location && <li>{ctx.t(site.location)}</li>}
         {home && <li><a href={ctx.href()}>{home}</a></li>}
         {site.socials.map((s) => <li><a href={s.url}>{s.label}</a></li>)}

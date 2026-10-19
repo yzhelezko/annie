@@ -68,6 +68,9 @@ const name = ctx.t(site.name);
         if (entries.some((e) => e.isIntersecting)) {
           live.liftInto(print);
           print.classList.add('inked');
+          const seal = document.querySelector('[data-seal]');
+          const d = new Date();
+          if (seal) seal.textContent = `${root.dataset.name} · ${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
         }
       }, { rootMargin: '200px' }).observe(print);
     }

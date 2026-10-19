@@ -15,7 +15,7 @@ const { ctx, project, dir } = Astro.props;
 const title = ctx.t(project.data.title);
 const at = (i: number) => `${project.filePath} → blocks[${i}]`;
 const SIZES = { full: '100vw', wide: '(min-width: 1680px) 1600px, 100vw', narrow: '(min-width: 900px) 760px, 100vw' } as const;
-type M = { src: string; alt?: unknown; caption?: unknown; poster?: string; ratio?: string; controls?: boolean };
+type M = { src: string; alt?: unknown; caption?: unknown; poster?: string; ratio?: string; position?: string; controls?: boolean };
 const alt = (m: M) => ctx.t(m.alt as never) || title;
 ---
 <div class="blocks">
@@ -24,7 +24,7 @@ const alt = (m: M) => ctx.t(m.alt as never) || title;
       if (b.type === 'media')
         return (
           <figure class={`b w-${b.width}`}>
-            <Media ctx={ctx} res={resolve(b.src, dir, at(i), b.poster)} alt={alt(b)} ratio={b.ratio} sizes={SIZES[b.width]} controls={b.controls} />
+            <Media ctx={ctx} res={resolve(b.src, dir, at(i), b.poster)} alt={alt(b)} ratio={b.ratio} position={b.position} sizes={SIZES[b.width]} controls={b.controls} />
             {b.caption && <figcaption>{ctx.t(b.caption)}</figcaption>}
           </figure>
         );
@@ -32,7 +32,7 @@ const alt = (m: M) => ctx.t(m.alt as never) || title;
         return (
           <figure class="b w-wide row" style={`--n:${b.row.length}`}>
             {b.row.map((m) => (
-              <Media ctx={ctx} res={resolve(m.src, dir, at(i), m.poster)} alt={alt(m)} ratio={m.ratio ?? '4/5'} sizes={`(min-width: 900px) ${Math.round(100 / b.row.length)}vw, 100vw`} controls={m.controls} />
+              <Media ctx={ctx} res={resolve(m.src, dir, at(i), m.poster)} alt={alt(m)} ratio={m.ratio ?? '4/5'} position={m.position} sizes={`(min-width: 900px) ${Math.round(100 / b.row.length)}vw, 100vw`} controls={m.controls} />
             ))}
             {b.caption && <figcaption>{ctx.t(b.caption)}</figcaption>}
           </figure>
@@ -42,7 +42,7 @@ const alt = (m: M) => ctx.t(m.alt as never) || title;
           <div class="b w-wide gallery" style={`--n:${b.columns}`}>
             {b.gallery.map((m) => (
               <figure>
-                <Media ctx={ctx} res={resolve(m.src, dir, at(i), m.poster)} alt={alt(m)} ratio={m.ratio} sizes={`(min-width: 900px) ${Math.round(100 / b.columns)}vw, 50vw`} controls={m.controls} />
+                <Media ctx={ctx} res={resolve(m.src, dir, at(i), m.poster)} alt={alt(m)} ratio={m.ratio} position={m.position} sizes={`(min-width: 900px) ${Math.round(100 / b.columns)}vw, 50vw`} controls={m.controls} />
                 {m.caption && <figcaption>{ctx.t(m.caption)}</figcaption>}
               </figure>
             ))}
@@ -117,6 +117,9 @@ const alt = (m: M) => ctx.t(m.alt as never) || title;
     }
     .gallery {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .gallery > figure:last-child:nth-child(odd) {
+      grid-column: 1 / -1;
     }
   }
   .text {

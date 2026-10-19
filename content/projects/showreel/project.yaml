@@ -14,6 +14,7 @@ summary:
   ru: "Демо: длинное видео с YouTube или Vimeo — вставьте ссылку в src. Здесь Big Buck Bunny (Blender Foundation, CC BY)."
   uk: "Демо: довге відео з YouTube або Vimeo — вставте посилання в src. Тут Big Buck Bunny (Blender Foundation, CC BY)."
 cover: poster.jpg
+coverRatio: auto
 size: full
 color: "#17171c"
 order: 6

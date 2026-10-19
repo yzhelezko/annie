@@ -1,7 +1,10 @@
-import { Bath, recipe, advance, settle, rng, type Op, type Pattern } from '../engine/marbling';
+import { Bath, recipe, advance, settle, rng, type Ink, type Op, type Pattern } from '../engine/marbling';
 
 const PATTERNS: Pattern[] = ['battal', 'gelgit', 'tarakli', 'bulbul'];
 const VERTEX_BUDGET = 160_000;
+const SWAY_PERIOD = 6400;
+const IDLE_BEFORE_DRIP = 4000;
+const DRIP_EVERY = 3600;
 
 export interface Live {
   /** Paints the current bath into another canvas, cover-fitted: the print lifted from it. */
@@ -15,6 +18,7 @@ export function mountBath(root: HTMLElement): Live {
   const choice = root.dataset.pattern as Pattern | 'random';
   const name = root.dataset.name ?? '';
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const coarse = matchMedia('(pointer: coarse)').matches;
   const chip = root.querySelector<HTMLElement>('[data-act="next"] .chip');
   const status = root.querySelector<HTMLElement>('[role="status"]');
   const sheet = root.querySelector<HTMLElement>('.sheet');
@@ -26,12 +30,18 @@ export function mountBath(root: HTMLElement): Live {
   let clock = 0;
   let last = 0;
   let raf = 0;
+  let frames = 0;
   let dirty = true;
   let visible = true;
   let touched = false;
-  let ambient = 0;
+  let lastTouch = -Infinity;
+  let lastDrip = 0;
+  let sway = 0;
   let next = 1;
+  let stale = false;
   let view = { s: 1, ox: 0, oy: 0, dpr: 1 };
+  // the water is always moving unless the visitor asked for stillness
+  const alive = () => !reduce && visible && !document.hidden;
 
   const unit = () => Math.sqrt(bath.w * bath.h);
 
@@ -54,7 +64,9 @@ export function mountBath(root: HTMLElement): Live {
     ops = recipe(bath.w, bath.h, order, rand, pattern);
     progress.clear();
     growth.clear();
+    pour = null;
     clock = 0;
+    sway = 0;
     fit();
     if (reduce) {
       settle(bath, ops);
@@ -72,8 +84,11 @@ export function mountBath(root: HTMLElement): Live {
 
   function frame(now: number) {
     raf = 0;
-    clock += Math.min(64, now - last);
+    const dt = Math.min(64, now - last);
+    clock += dt;
     last = now;
+    frames++;
+
     if (ops.length) {
       const live: Op[] = [];
       for (const op of ops) {
@@ -89,9 +104,32 @@ export function mountBath(root: HTMLElement): Live {
       ops = live;
       dirty = true;
     }
-    if (bath.vertexCount() > VERTEX_BUDGET) bath.seg *= 1.25;
+
+    if (pour) flow(dt);
+    if (stale) {
+      bath.refine();
+      stale = false;
+    }
+
+    if (alive()) {
+      // gentle back-and-forth swell: a shear that returns to where it started every period
+      const u = unit();
+      const target = Math.sin((clock / SWAY_PERIOD) * Math.PI * 2) * u * 0.014;
+      if (!coarse || frames % 2 === 0) {
+        bath.comb(Math.PI / 2, u * 0.11, u * 0.031, target - sway, u * 0.03, true, frames % 12 === 0);
+        sway = target;
+        dirty = true;
+      }
+      if (clock - lastTouch > IDLE_BEFORE_DRIP && clock - lastDrip > DRIP_EVERY && !ops.length) {
+        lastDrip = clock;
+        drip();
+      }
+      if (frames % 90 === 0) bath.prune(Math.max(bath.w, bath.h) * 0.6);
+    }
+
+    if (bath.vertexCount() > VERTEX_BUDGET) bath.seg *= 1.2;
     if (dirty) draw();
-    if (ops.length) play();
+    if (alive() || ops.length || pour) play();
   }
 
   function draw() {
@@ -110,15 +148,28 @@ export function mountBath(root: HTMLElement): Live {
     play();
   }
 
-  function drop(x: number, y: number) {
+  const take = () => {
     const color = colors[next % colors.length];
     next++;
     if (chip) chip.style.background = colors[next % colors.length];
-    schedule({ kind: 'drop', x, y, r: unit() * (0.045 + Math.random() * 0.04), color, dur: 520, at: 0 });
+    return color;
+  };
+
+  function drop(x: number, y: number) {
+    schedule({ kind: 'drop', x, y, r: unit() * (0.045 + Math.random() * 0.04), color: take(), dur: 520, at: 0 });
+  }
+
+  function drip() {
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    schedule({ kind: 'drop', x: bath.w * (0.08 + Math.random() * 0.84), y: bath.h * (0.08 + Math.random() * 0.84), r: unit() * (0.02 + Math.random() * 0.035), color, dur: 1100, at: 0 });
   }
 
   function comb() {
     const u = unit();
+    if (Math.random() < 0.3) {
+      schedule({ kind: 'swirl', x: bath.w * (0.25 + Math.random() * 0.5), y: bath.h * (0.25 + Math.random() * 0.5), r: u * (0.06 + Math.random() * 0.08), shift: u * 0.5 * (Math.random() < 0.5 ? -1 : 1), sharp: u * 0.05, dur: 1300, at: 0 });
+      return;
+    }
     const vertical = Math.random() < 0.5;
     schedule({
       kind: 'comb',
@@ -133,27 +184,69 @@ export function mountBath(root: HTMLElement): Live {
     });
   }
 
-  // Pointer = stylus. Horizontal drags comb; vertical ones scroll on touch (touch-action: pan-y).
+  // Holding the pointer pours pigment: the drop keeps spreading, area growing linearly with time.
+  let pour: { x: number; y: number; r: number; held: boolean; ink: Ink } | null = null;
+  function flow(dt: number) {
+    const p = pour!;
+    const u = unit();
+    const min = u * 0.045;
+    const max = u * 0.32;
+    const rate = (p.held ? 0.000014 : 0.00006) * u * u;
+    if ((!p.held && p.r >= min) || p.r >= max) {
+      pour = null;
+      return;
+    }
+    const r1 = Math.min(max, Math.sqrt(p.r * p.r + rate * dt));
+    bath.spread(p.x, p.y, Math.sqrt(r1 * r1 - p.r * p.r));
+    p.r = r1;
+    dirty = true;
+  }
+
+  // Pointer = stylus. Hovering stirs, dragging combs, holding pours. On touch, vertical drags scroll (pan-y).
   const toBath = (e: PointerEvent) => {
     const r = canvas.getBoundingClientRect();
     return { x: (e.clientX - r.left - view.ox) / view.s, y: (e.clientY - r.top - view.oy) / view.s };
   };
   let pen: { x: number; y: number; moved: number } | null = null;
+  let hover: { x: number; y: number } | null = null;
 
   canvas.addEventListener('pointerdown', (e) => {
     if (e.button !== 0) return;
     first();
-    pen = { ...toBath(e), moved: 0 };
+    const p = toBath(e);
+    pen = { ...p, moved: 0 };
+    const r0 = unit() * 0.006;
+    pour = { ...p, r: r0, held: true, ink: bath.drop(p.x, p.y, r0, take()) };
     canvas.setPointerCapture(e.pointerId);
+    play();
   });
   canvas.addEventListener('pointermove', (e) => {
-    if (!pen) return;
+    lastTouch = clock;
     const events = e.getCoalescedEvents?.() ?? [e];
+    if (!pen) {
+      if (e.pointerType !== 'mouse' || reduce) return;
+      const radius = unit() * 0.02;
+      for (const ev of events) {
+        const p = toBath(ev);
+        if (hover) bath.stroke(hover.x, hover.y, p.x, p.y, radius, 0.32);
+        hover = p;
+      }
+      dirty = true;
+      play();
+      return;
+    }
     const radius = unit() * 0.012;
     for (const ev of events) {
       const p = toBath(ev);
       const d = Math.hypot(p.x - pen.x, p.y - pen.y);
-      if (pen.moved + d > 6 || pen.moved > 6) bath.stroke(pen.x, pen.y, p.x, p.y, radius);
+      if (pen.moved + d > 6 || pen.moved > 6) {
+        // a drag that starts straight away is combing, not pouring: lift the barely-started drop back out
+        if (pour?.held && pour.r < unit() * 0.03) {
+          bath.inks = bath.inks.filter((k) => k !== pour!.ink);
+          pour = null;
+        } else if (pour) pour.held = false;
+        bath.stroke(pen.x, pen.y, p.x, p.y, radius);
+      }
       pen.moved += d;
       pen.x = p.x;
       pen.y = p.y;
@@ -161,13 +254,34 @@ export function mountBath(root: HTMLElement): Live {
     dirty = true;
     play();
   });
-  canvas.addEventListener('pointerup', (e) => {
-    if (pen && pen.moved < 6) drop(toBath(e).x, toBath(e).y);
+  const release = () => {
+    if (pour) pour.held = false;
     pen = null;
-  });
-  canvas.addEventListener('pointercancel', () => (pen = null));
+    hover = null;
+    play();
+  };
+  canvas.addEventListener('pointerup', release);
+  canvas.addEventListener('pointercancel', release);
+  canvas.addEventListener('pointerleave', () => (hover = null));
+
+  // Scrolling drags a comb through the bath; scrolling back undoes it exactly.
+  let scrolled = scrollY;
+  addEventListener(
+    'scroll',
+    () => {
+      const d = scrollY - scrolled;
+      scrolled = scrollY;
+      if (!d || reduce || !visible || !bath) return;
+      const u = unit();
+      bath.comb(Math.PI / 2, u * 0.085, 0, d * 0.3, u * 0.012, true, false);
+      stale = dirty = true;
+      play();
+    },
+    { passive: true },
+  );
 
   function first() {
+    lastTouch = clock;
     if (touched) return;
     touched = true;
     root.classList.add('touched');
@@ -222,17 +336,11 @@ export function mountBath(root: HTMLElement): Live {
     } else compose();
   }
 
-  // A few drops fall on their own until the visitor takes the stylus.
-  setInterval(() => {
-    if (touched || reduce || !visible || document.hidden || ambient > 7) return;
-    ambient++;
-    schedule({ kind: 'drop', x: bath.w * (0.1 + Math.random() * 0.8), y: bath.h * (0.1 + Math.random() * 0.8), r: unit() * 0.03, color: colors[(ambient * 3) % colors.length], dur: 900, at: 0 });
-  }, 5200);
-
   new IntersectionObserver(([en]) => {
     visible = en.isIntersecting;
-    if (visible && (ops.length || dirty)) play();
+    if (visible) play();
   }).observe(root);
+  document.addEventListener('visibilitychange', () => document.hidden || play());
 
   let resizeTimer = 0;
   new ResizeObserver(() => {

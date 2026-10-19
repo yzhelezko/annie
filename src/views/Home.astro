@@ -19,6 +19,7 @@ const jsonld = {
   name: ctx.t(site.name),
   jobTitle: ctx.t(site.role),
   email: `mailto:${site.email}`,
+  telephone: site.phone,
   sameAs: site.socials.map((s) => s.url),
 };
 ---

@@ -62,7 +62,7 @@ export class Bath {
    * angle: tine direction; spacing: distance between tines; shift: travel at a tine;
    * sharp: falloff (smaller is crisper); alternate: neighbouring tines run opposite ways (gel-git).
    */
-  comb(angle: number, spacing: number, offset: number, shift: number, sharp: number, alternate = false) {
+  comb(angle: number, spacing: number, offset: number, shift: number, sharp: number, alternate = false, refine = true) {
     const mx = Math.cos(angle);
     const my = Math.sin(angle);
     const half = spacing / 2;
@@ -80,7 +80,14 @@ export class Bath {
         p[i + 1] += my * z;
       }
     }
-    this.refine();
+    if (refine) this.refine();
+  }
+
+  /** Drops inks that left the view by more than `margin`: they can no longer show. */
+  prune(margin: number) {
+    this.inks = this.inks.filter(
+      (k) => !(k.maxX < -margin || k.minX > this.w + margin || k.maxY < -margin || k.minY > this.h + margin),
+    );
   }
 
   /** Drags a stylus from (ax, ay) to (bx, by). Sub-stepped so each step stays injective. */
